@@ -369,7 +369,7 @@ USD→GBP to Favorites, and an empty amount shows the empty state (quickstart V8
 
 ### Tests for User Story 5
 
-- [ ] T062 [P] [US5] Tests in `src/components/ComparePanel/ComparePanel.test.tsx`:
+- [X] T062 [P] [US5] Tests in `src/components/ComparePanel/ComparePanel.test.tsx`:
   - The header "1,000 from USD" and "8 pairs"
   - Rows GBP, JPY, CHF, CAD, AUD, INR, CNY, BDT with amount and "@ rate"
   - The send currency is left out (send=GBP → 7 pairs)
@@ -379,14 +379,14 @@ USD→GBP to Favorites, and an empty amount shows the empty state (quickstart V8
 
 ### Implementation for User Story 5
 
-- [ ] T063 [US5] Create `src/components/ComparePanel/ComparePanel.tsx` and `ComparePanel.module.css`, per Figma 151:2490 and CompareItem:
+- [X] T063 [US5] Create `src/components/ComparePanel/ComparePanel.tsx` and `ComparePanel.module.css`, per Figma 151:2490 and CompareItem:
   - The title "Multi-currency" with "{amount} from {FROM}" and the count "{n} pairs"
   - A `<ul>` of rows showing flag, code, name, the converted amount (`formatAmount`), and "@ {rate}"
   - A star toggle `<button aria-pressed aria-label="Pin USD to GBP">` that announces the pin change
   - `EmptyState` with the FR-027 copy
 
   (FR-024–FR-027)
-- [ ] T064 [US5] In `src/App.tsx`, render `ComparePanel` in the Compare tabpanel with `amount`, `pair.from`, `useRates().rate`, and `useFavorites` toggle and `isPinned`
+- [X] T064 [US5] In `src/App.tsx`, render `ComparePanel` in the Compare tabpanel with `amount`, `pair.from`, `useRates().rate`, and `useFavorites` toggle and `isPinned`
 
 **Checkpoint**: US5 works on its own. Pinned rows appear in Favorites.
 

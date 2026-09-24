@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import styles from './App.module.css'
+import { ComparePanel } from './components/ComparePanel/ComparePanel'
 import { Converter } from './components/Converter/Converter'
 import { FavoritesPanel } from './components/FavoritesPanel/FavoritesPanel'
 import { Header } from './components/Header/Header'
@@ -133,6 +134,16 @@ function FxChecker() {
           <Tabs tabs={tabs} active={activeTab} onChange={setActiveTab}>
             {activeTab === 'history' && rates.status !== 'loading' && (
               <HistoryPanel pair={pair} range={range} onRangeChange={setRange} />
+            )}
+            {activeTab === 'compare' && (
+              <ComparePanel
+                amount={amount}
+                from={pair.from}
+                currencies={rates.currencies}
+                rate={rates.rate}
+                isPinned={favorites.isPinned}
+                onTogglePin={togglePin}
+              />
             )}
             {activeTab === 'favorites' && (
               <FavoritesPanel
