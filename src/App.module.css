@@ -75,3 +75,20 @@
 .iconButton:hover {
   border-color: var(--color-text-muted);
 }
+
+.textButton {
+  padding: var(--space-100) var(--space-150);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-8);
+  color: var(--color-text-muted);
+  font-size: var(--text-preset-5-size);
+  line-height: var(--text-preset-5-line);
+  letter-spacing: var(--text-preset-5-tracking);
+  text-transform: uppercase;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.textButton:hover {
+  border-color: var(--color-text-muted);
+  color: var(--color-text);
+}

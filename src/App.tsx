@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import styles from './App.module.css'
 import { ComparePanel } from './components/ComparePanel/ComparePanel'
 import { Converter } from './components/Converter/Converter'
+import type { CurrencyPickerHandle } from './components/CurrencyPicker/CurrencyPicker'
 import { FavoritesPanel } from './components/FavoritesPanel/FavoritesPanel'
 import { Header } from './components/Header/Header'
 import { HistoryPanel } from './components/HistoryPanel/HistoryPanel'
@@ -9,16 +10,19 @@ import { LiveTicker } from './components/LiveTicker/LiveTicker'
 import { LogPanel } from './components/LogPanel/LogPanel'
 import { LiveAnnouncerProvider, useAnnounce } from './components/LiveAnnouncer/LiveAnnouncer'
 import { PinButton } from './components/PinButton/PinButton'
+import { ShortcutsHelp } from './components/ShortcutsHelp/ShortcutsHelp'
 import { StaleBanner } from './components/StaleBanner/StaleBanner'
 import { Tabs, type TabItem } from './components/Tabs/Tabs'
 import { DEFAULT_AMOUNT, DEFAULT_PAIR } from './data/currencyCatalog'
 import { useConversionLog } from './hooks/useConversionLog'
 import { useFavorites } from './hooks/useFavorites'
 import { usePersistentState } from './hooks/usePersistentState'
+import { useShortcuts } from './hooks/useShortcuts'
 import { useTheme } from './hooks/useTheme'
 import { pairFromUrl, useUrlPairSync } from './hooks/useUrlPair'
 import { useRates } from './hooks/useRates'
 import type { CurrencyPair, HistoryRange, TabId } from './types'
+import { downloadCsv } from './utils/csv'
 import { formatAmount, formatInputDisplay, parseAmountInput } from './utils/format'
 import { swapPair, withFrom, withTo } from './utils/pair'
 
@@ -74,6 +78,19 @@ function FxChecker() {
     TAB_IDS.includes(v as TabId) ? (v as TabId) : null,
   )
   const [range, setRange] = useState<HistoryRange>('1M')
+  const [helpOpen, setHelpOpen] = useState(false)
+  const closeHelp = useCallback(() => setHelpOpen(false), [])
+  const sendPickerRef = useRef<CurrencyPickerHandle>(null)
+
+  useShortcuts({
+    openSearch: () => sendPickerRef.current?.open(),
+    swap: () => setPair(swapPair),
+    setRange: (r) => {
+      setRange(r)
+      setActiveTab('history')
+    },
+    toggleHelp: () => setHelpOpen((open) => !open),
+  })
 
   const rate = rates.rate(pair.from, pair.to)
   const amount = parseAmountInput(amountText).value
@@ -124,18 +141,31 @@ function FxChecker() {
       <Header
         currencyCount={ready ? rates.currencies.length : null}
         actions={
-          <button
-            type="button"
-            className={styles.iconButton}
-            aria-pressed={theme.theme === 'light'}
-            aria-label="Light theme"
-            title="Light theme"
-            onClick={theme.toggle}
-          >
-            <ThemeIcon light={theme.theme === 'light'} />
-          </button>
+          <>
+            <button
+              type="button"
+              className={styles.iconButton}
+              aria-expanded={helpOpen}
+              aria-label="Keyboard shortcuts"
+              title="Keyboard shortcuts (?)"
+              onClick={() => setHelpOpen((open) => !open)}
+            >
+              <span aria-hidden="true">?</span>
+            </button>
+            <button
+              type="button"
+              className={styles.iconButton}
+              aria-pressed={theme.theme === 'light'}
+              aria-label="Light theme"
+              title="Light theme"
+              onClick={theme.toggle}
+            >
+              <ThemeIcon light={theme.theme === 'light'} />
+            </button>
+          </>
         }
       />
+      {helpOpen && <ShortcutsHelp onClose={closeHelp} />}
       {ready && <LiveTicker rate={rates.rate} change={rates.change} />}
       <main className={styles.content}>
         <h1 className="visually-hidden">FX Checker currency converter</h1>
@@ -164,6 +194,7 @@ function FxChecker() {
               onFromChange={(code) => setPair((p) => withFrom(p, code))}
               onToChange={(code) => setPair((p) => withTo(p, code))}
               onSwap={() => setPair(swapPair)}
+            sendPickerRef={sendPickerRef}
               actions={
                 <>
                   <PinButton
@@ -212,6 +243,11 @@ function FxChecker() {
                 onClearAll={clearLog}
                 onUndo={undoClear}
                 onPauseUndo={log.pauseUndo}
+                extraActions={
+                  <button type="button" className={styles.textButton} onClick={() => downloadCsv(log.entries)}>
+                    Export CSV
+                  </button>
+                }
               />
             )}
           </Tabs>

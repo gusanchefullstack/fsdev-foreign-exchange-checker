@@ -1,4 +1,4 @@
-import { useId } from 'react'
+import { useId, useState, type PointerEvent } from 'react'
 import type { HistorySeries } from '../../types'
 import { formatPct, formatRate, formatShortDate } from '../../utils/format'
 import { rangeName } from '../../utils/ranges'
@@ -18,6 +18,7 @@ function tickIndices(count: number, ticks = 5): number[] {
 /** Hand-drawn SVG line + area chart for the pair's rate history (FR-019, FR-022, research R7). */
 export function RateChart({ series }: { series: HistorySeries }) {
   const gradientId = useId()
+  const [hover, setHover] = useState<number | null>(null)
   const { points, high, low, mid, pair, range } = series
   const span = high - low || high * 0.001 || 1
   const x = (i: number) => (points.length === 1 ? W / 2 : (i / (points.length - 1)) * W)
@@ -26,6 +27,17 @@ export function RateChart({ series }: { series: HistorySeries }) {
   const line = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${x(i).toFixed(2)},${y(p.rate).toFixed(2)}`).join(' ')
   const area = `${line} L${W},${H} L0,${H} Z`
   const lastPoint = points[points.length - 1]!
+
+  // Crosshair (FR-050): map the pointer's x to the nearest data point.
+  function onPointerMove(e: PointerEvent<HTMLDivElement>) {
+    const rect = e.currentTarget.getBoundingClientRect()
+    if (!rect.width) return
+    const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width))
+    setHover(Math.round(ratio * (points.length - 1)))
+  }
+  const hovered = hover !== null ? points[hover] : undefined
+  const hoverX = hover !== null ? (x(hover) / W) * 100 : 0
+  const hoverY = hovered ? (y(hovered.rate) / H) * 100 : 0
   const summary =
     `${pair.from} to ${pair.to} rate over ${rangeName(range)}: from ${formatRate(series.open)} ` +
     `to ${formatRate(series.last)}, ${series.changePct < 0 ? 'down' : 'up'} ${formatPct(series.changePct).replace(/[▲▼+−] ?/g, '')}. ` +
@@ -48,25 +60,56 @@ export function RateChart({ series }: { series: HistorySeries }) {
           <span>{formatRate(low)}</span>
         </div>
         <div className={styles.plot}>
-          <svg
-            className={styles.svg}
-            viewBox={`0 0 ${W} ${H}`}
-            preserveAspectRatio="none"
-            role="img"
-            aria-label={summary}
+          <div
+            className={styles.hitArea}
+            data-testid="chart-plot"
+            onPointerMove={onPointerMove}
+            onPointerDown={onPointerMove}
+            onPointerLeave={() => setHover(null)}
           >
-            <defs>
-              <linearGradient id={gradientId} x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0%" stopColor="var(--color-accent)" stopOpacity="0.55" />
-                <stop offset="100%" stopColor="var(--color-accent)" stopOpacity="0" />
-              </linearGradient>
-            </defs>
-            {[PAD, H / 2, H - PAD].map((gy) => (
-              <line key={gy} x1="0" x2={W} y1={gy} y2={gy} className={styles.grid} vectorEffect="non-scaling-stroke" />
-            ))}
-            <path d={area} fill={`url(#${gradientId})`} />
-            <path d={line} className={styles.line} vectorEffect="non-scaling-stroke" />
-          </svg>
+            <svg
+              className={styles.svg}
+              viewBox={`0 0 ${W} ${H}`}
+              preserveAspectRatio="none"
+              role="img"
+              aria-label={summary}
+            >
+              <defs>
+                <linearGradient id={gradientId} x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0%" stopColor="var(--color-accent)" stopOpacity="0.55" />
+                  <stop offset="100%" stopColor="var(--color-accent)" stopOpacity="0" />
+                </linearGradient>
+              </defs>
+              {[PAD, H / 2, H - PAD].map((gy) => (
+                <line key={gy} x1="0" x2={W} y1={gy} y2={gy} className={styles.grid} vectorEffect="non-scaling-stroke" />
+              ))}
+              <path d={area} fill={`url(#${gradientId})`} />
+              <path d={line} className={styles.line} vectorEffect="non-scaling-stroke" />
+              {hovered && (
+                <line
+                  x1={x(hover!)}
+                  x2={x(hover!)}
+                  y1="0"
+                  y2={H}
+                  className={styles.crosshair}
+                  vectorEffect="non-scaling-stroke"
+                />
+              )}
+            </svg>
+            {hovered && (
+              <>
+                <span className={styles.marker} style={{ left: `${hoverX}%`, top: `${hoverY}%` }} aria-hidden="true" />
+                <span
+                  className={`${styles.tooltip} ${hoverX > 70 ? styles.tooltipLeft : ''}`}
+                  style={{ left: `${hoverX}%` }}
+                  data-testid="chart-tooltip"
+                  aria-hidden="true"
+                >
+                  {formatShortDate(hovered.date)} · {formatRate(hovered.rate)}
+                </span>
+              </>
+            )}
+          </div>
           <div className={styles.xAxis} aria-hidden="true">
             {tickIndices(points.length).map((i) => (
               <span key={i}>{formatShortDate(points[i]!.date)}</span>

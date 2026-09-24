@@ -103,3 +103,46 @@
     display: none;
   }
 }
+
+/* Crosshair layer (FR-050): pointer + touch drag over the plot. */
+.hitArea {
+  position: relative;
+  touch-action: pan-y;
+  cursor: crosshair;
+}
+
+.crosshair {
+  stroke: var(--color-text-muted);
+  stroke-dasharray: 3 3;
+  stroke-width: 1;
+}
+
+.marker {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--color-surface);
+  border-radius: var(--radius-full);
+  background: var(--color-accent);
+  translate: -50% -50%;
+  pointer-events: none;
+}
+
+.tooltip {
+  position: absolute;
+  top: 0;
+  padding: var(--space-075) var(--space-100);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-8);
+  background: var(--color-surface-raised);
+  font-size: var(--text-preset-5-size);
+  line-height: var(--text-preset-5-line);
+  letter-spacing: var(--text-preset-5-tracking);
+  white-space: nowrap;
+  translate: 8px 0;
+  pointer-events: none;
+}
+
+.tooltipLeft {
+  translate: calc(-100% - 8px) 0;
+}

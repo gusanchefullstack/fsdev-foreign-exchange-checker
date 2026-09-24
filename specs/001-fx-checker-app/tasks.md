@@ -482,27 +482,27 @@ with the contract header and rows. Hovering the chart shows the date and rate (q
 
 ### Tests for User Story 10
 
-- [ ] T078 [P] [US10] Tests in `src/hooks/useShortcuts.test.ts`:
+- [X] T078 [P] [US10] Tests in `src/hooks/useShortcuts.test.ts`:
   - Each key from `contracts/ui-contract.md` calls its handler
   - Nothing fires while focus is in an input, select, or textarea, or when Ctrl, Meta, or Alt is held
-- [ ] T079 [P] [US10] Tests in `src/utils/csv.test.ts`:
+- [X] T079 [P] [US10] Tests in `src/utils/csv.test.ts`:
   - The header is exactly `datetime,from,to,send_amount,received_amount,rate`
   - Rows are newest first, amounts are 2 dp with no grouping, the rate is 6 dp, and lines end in `\r\n`
   - Values that need it are quoted
-- [ ] T080 [P] [US10] Tests in `src/components/HistoryPanel/RateChart.test.tsx`: the pointer moving over the SVG shows a crosshair and a tooltip with the nearest point's date and 4 dp rate, and pointer leave hides it
+- [X] T080 [P] [US10] Tests in `src/components/HistoryPanel/RateChart.test.tsx`: the pointer moving over the SVG shows a crosshair and a tooltip with the nearest point's date and 4 dp rate, and pointer leave hides it
 
 ### Implementation for User Story 10
 
-- [ ] T081 [P] [US10] Create `src/utils/csv.ts`: `toCsv(entries)` and `downloadCsv(entries)` (a Blob plus a temporary anchor, filename `fx-conversion-log-YYYY-MM-DD.csv`). Add an "Export CSV" button to `src/components/LogPanel/LogPanel.tsx`, disabled when the log is empty (FR-049)
-- [ ] T082 [P] [US10] Create `src/hooks/useShortcuts.ts` and wire it into `src/App.tsx`:
+- [X] T081 [P] [US10] Create `src/utils/csv.ts`: `toCsv(entries)` and `downloadCsv(entries)` (a Blob plus a temporary anchor, filename `fx-conversion-log-YYYY-MM-DD.csv`). Add an "Export CSV" button to `src/components/LogPanel/LogPanel.tsx`, disabled when the log is empty (FR-049)
+- [X] T082 [P] [US10] Create `src/hooks/useShortcuts.ts` and wire it into `src/App.tsx`:
   - `/` opens the Send picker and focuses its search (expose `open()` through a ref on `CurrencyPicker`)
   - `s` swaps
   - `1`–`6` set the range and switch to History
   - `?` toggles the help panel
 
   (FR-048)
-- [ ] T083 [US10] Create `src/components/ShortcutsHelp/ShortcutsHelp.tsx` and `ShortcutsHelp.module.css`: a non-modal popover listing the shortcuts in a `<dl>`, opened by a "Keyboard shortcuts" header button or `?`, and closed by Escape with focus returning to its opener. Add the button to `src/components/Header/Header.tsx`. Build it per spec Assumption "UI not in the design".
-- [ ] T084 [US10] Add the crosshair to `src/components/HistoryPanel/RateChart.tsx`: pointer events map x to the nearest point, then draw a vertical dashed line, a lime point marker, and a tooltip showing "May 06 · 0.8530" kept inside the chart bounds. Touch drag works too, and pointer leave hides it (FR-050)
+- [X] T083 [US10] Create `src/components/ShortcutsHelp/ShortcutsHelp.tsx` and `ShortcutsHelp.module.css`: a non-modal popover listing the shortcuts in a `<dl>`, opened by a "Keyboard shortcuts" header button or `?`, and closed by Escape with focus returning to its opener. Add the button to `src/components/Header/Header.tsx`. Build it per spec Assumption "UI not in the design".
+- [X] T084 [US10] Add the crosshair to `src/components/HistoryPanel/RateChart.tsx`: pointer events map x to the nearest point, then draw a vertical dashed line, a lime point marker, and a tooltip showing "May 06 · 0.8530" kept inside the chart bounds. Touch drag works too, and pointer leave hides it (FR-050)
 
 **Checkpoint**: All user stories are complete.
 

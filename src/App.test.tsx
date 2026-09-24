@@ -53,3 +53,22 @@ describe('App-level accessibility (US7)', () => {
     expect((await axe(container)).violations).toEqual([])
   })
 })
+
+describe('Keyboard shortcuts in the app (US10)', () => {
+  it('opens the send search with "/", swaps with "s", sets the range with digits, and lists shortcuts with "?"', async () => {
+    const user = userEvent.setup()
+    await renderApp()
+    await user.keyboard('/')
+    expect(screen.getByRole('combobox', { name: 'Search currencies' })).toHaveFocus()
+    await user.keyboard('{Escape}')
+    ;(document.activeElement as HTMLElement).blur()
+    await user.keyboard('s')
+    expect(screen.getByText('1 EUR = 1.1410 USD')).toBeInTheDocument()
+    await user.keyboard('5')
+    expect(screen.getByRole('radio', { name: '1Y' })).toHaveAttribute('aria-checked', 'true')
+    await user.keyboard('?')
+    expect(screen.getByRole('dialog', { name: 'Keyboard shortcuts' })).toBeInTheDocument()
+    await user.keyboard('{Escape}')
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+})
