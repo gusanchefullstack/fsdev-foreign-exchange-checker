@@ -39,3 +39,44 @@ describe('useRates (US8)', () => {
     await waitFor(() => expect(result.current.status).toBe('error'))
   })
 })
+
+describe('useRates with the build-time bundle (FR-054)', () => {
+  const bundle = async (date: string, stale: boolean) => {
+    const { testBootstrap } = await import('../../tests/setup')
+    testBootstrap.current = {
+      currencies: [
+        { code: 'USD', name: 'US Dollar', flagSrc: '', popular: true },
+        { code: 'EUR', name: 'Euro', flagSrc: '', popular: true },
+      ],
+      snapshot: { date, latest: { USD: 1, EUR: 0.85 }, previous: { USD: 1, EUR: 0.85 }, fetchedAt: 0, stale },
+      history: [],
+    }
+  }
+
+  it('is ready on the first render, then swaps in live rates', async () => {
+    await bundle('2026-09-23', false)
+    mockApi()
+    const { result } = renderHook(() => useRates())
+    expect(result.current.status).toBe('ready')
+    expect(result.current.rate('USD', 'EUR')).toBe(0.85)
+    await waitFor(() => expect(result.current.rate('USD', 'EUR')).toBe(0.8764))
+    expect(result.current.snapshot!.stale).toBe(false)
+  })
+
+  it('keeps a fresh bundle but flags it stale when live requests fail', async () => {
+    await bundle('2026-09-23', false)
+    mockApi({ rates: 'error' })
+    const { result } = renderHook(() => useRates())
+    await waitFor(() => expect(result.current.snapshot!.stale).toBe(true))
+    expect(result.current.rate('USD', 'EUR')).toBe(0.85)
+  })
+
+  it('prefers a newer cached snapshot over an older bundle when offline', async () => {
+    await bundle('2026-09-10', true)
+    localStorage.setItem('fx:v1:rates', JSON.stringify(cached))
+    mockApi({ rates: 'error' })
+    const { result } = renderHook(() => useRates())
+    await waitFor(() => expect(result.current.snapshot!.date).toBe('2026-09-20'))
+    expect(result.current.snapshot!.stale).toBe(true)
+  })
+})

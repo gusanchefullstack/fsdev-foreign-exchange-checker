@@ -17,6 +17,7 @@ persistence, empty/error states, and the listed enhancement features)
 - Q: Reference rates are published once per business day, so what should the "1D" chart range show? → A: 1D charts the last 5 published rates (the 5 most recent publication days). Its Open/Last/Change/% change compare the latest published rate with the previous one.
 - Q: Should the currency picker list every currency the rate source returns, or only the currencies we have flag images for? → A (revised during planning, after the API was found to return 166 currencies against the design's 55): Only currencies that the source returns AND that have a bundled flag image (the design's set, about 55). The code placeholder remains only as a fallback.
 - Q: When the user taps "Clear all" in the conversion log, should the log be deleted immediately, or should there be a safety step first? → A: Clear immediately, then offer "Undo" for 5 seconds to restore the log.
+- Q: Frontend Mentor's screenshot bot captures the page before live rates arrive, so the thumbnail shows "Loading live rates…". How should first paint work? → A (amendment after submission, 2026-09-24): Bundle the latest published rates, the currency list and the default pair's 1M history into the build. Render them immediately and replace them with live data when the requests return. Bundled rates older than 4 days get the out-of-date banner.
 - Q: Should the conversion log have a maximum number of entries, with the oldest dropped automatically when it's full? → A: Keep the 100 most recent entries; the oldest is dropped automatically when a new one is logged.
 
 ## User Scenarios & Testing *(mandatory)*
@@ -335,8 +336,9 @@ spreadsheet, and hover over the chart to read the date and rate.
   Favorites and log just won't persist.
 - **History range with too few points**: If a range returns fewer than two data points, the chart
   error or empty state is shown.
-- **Slow network**: Areas waiting for rates or history show a loading state instead of blank or
-  stale values.
+- **Slow network**: The converter, ticker, compare, favorites and default history show the bundled
+  rates straight away (FR-054). Other history ranges and pairs show a loading state instead of
+  blank or stale values.
 - **Days without a publication**: The source may or may not publish on weekends and holidays. The
   app always uses the most recent published rate and shows its date.
 
@@ -492,6 +494,12 @@ spreadsheet, and hover over the chart to read the date and rate.
 - **FR-052**: Technical errors MUST NEVER be shown raw to users. Every failure MUST be shown as a
   friendly message.
 - **FR-053**: Areas waiting for data MUST show a loading state.
+- **FR-054**: The build MUST bundle the latest published rates (with the previous publication), the
+  currency list, and the default pair's (USD→EUR) 1M history. On first paint the app MUST render the
+  converter, ticker, compare, favorites and default history from this bundled data, then replace it
+  with live data when the requests succeed, with no loading state in between. Bundled rates whose
+  publication date is more than 4 days old MUST show the out-of-date banner (FR-051) until live data
+  arrives. If live requests fail, the newer of the bundled and cached rates is used, flagged stale.
 
 ### Key Entities
 
@@ -530,6 +538,10 @@ spreadsheet, and hover over the chart to read the date and rate.
   defined in FR-007.
 
 ## Assumptions
+
+- **Bundled rates**: Build-time data (FR-054) comes from the same Frankfurter endpoints, fetched
+  during the build. If the build can't reach the API, the previously committed data file is kept.
+  Its purpose is a fast, representative first paint, including Frontend Mentor's screenshot bot.
 
 - **Rate source**: Rates, the currency list, and history come from the Frankfurter service, as the
   spec draft recommends. Its default rates combine reference rates from several central banks,

@@ -55,22 +55,20 @@ function isoMonthsAgo(months: number, from = new Date()): string {
   return d.toISOString().slice(0, 10)
 }
 
-interface ApiCurrency {
+export interface ApiCurrency {
   iso_code: string
   name: string
 }
 
-interface ApiRate {
+export interface ApiRate {
   date: string
   base: string
   quote: string
   rate: number
 }
 
-/** Currencies = API list ∩ bundled flag catalog; Popular first, then by code. */
-export async function fetchCurrencies(): Promise<Currency[]> {
-  const list = await getJson<ApiCurrency[]>('/v2/currencies')
-  if (!Array.isArray(list)) throw new RatesError('unknown')
+/** API currency list ∩ bundled flag catalog; Popular first, then by code. */
+export function currenciesFromApi(list: ApiCurrency[]): Currency[] {
   const currencies = list
     .filter((c) => c.iso_code in CURRENCY_CATALOG)
     .map<Currency>((c) => ({
@@ -80,6 +78,12 @@ export async function fetchCurrencies(): Promise<Currency[]> {
       popular: POPULAR_CODES.includes(c.iso_code),
     }))
   return sortCurrencies(currencies)
+}
+
+export async function fetchCurrencies(): Promise<Currency[]> {
+  const list = await getJson<ApiCurrency[]>('/v2/currencies')
+  if (!Array.isArray(list)) throw new RatesError('unknown')
+  return currenciesFromApi(list)
 }
 
 export function sortCurrencies(list: Currency[]): Currency[] {
@@ -99,8 +103,12 @@ export async function fetchLatestSnapshot(codes: CurrencyCode[] = CATALOG_CODES)
   const quotes = codes.filter((c) => c !== 'USD').join(',')
   const rows = await getJson<ApiRate[]>(`/v2/rates?base=USD&quotes=${quotes}&from=${isoDaysAgo(10)}`)
   if (!Array.isArray(rows) || rows.length === 0) throw new RatesError('unknown')
+  return snapshotFromRows(rows)
+}
 
-  const byQuote = new Map<string, ApiRate[]>()
+/** Groups USD-based rows by quote; the last two dates become `latest` and `previous`. */
+export function snapshotFromRows(rows: Pick<ApiRate, 'date' | 'quote' | 'rate'>[]): RatesSnapshot {
+  const byQuote = new Map<string, Pick<ApiRate, 'date' | 'quote' | 'rate'>[]>()
   for (const row of rows) {
     const list = byQuote.get(row.quote) ?? []
     list.push(row)

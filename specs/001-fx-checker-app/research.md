@@ -153,6 +153,22 @@ All findings were checked against the live API and the Figma file on 2026-09-24.
   (1100px content column).
 - Font: JetBrains Mono variable, self-hosted from `assets/fonts/`.
 
+## R14. Build-time rate bundle (FR-054, amendment)
+
+- **Decision**: A `prebuild` npm script (`scripts/fetch-rates.mjs`) calls the same endpoints as the
+  app: `/v2/currencies`, the 10-day USD snapshot, and USD→EUR 1M history. It writes
+  `src/data/bootstrap.json`, which is committed so that dev and offline builds work.
+  - `useRates` starts in `ready` from this bundle, with `stale` = publication older than 4 days, and
+    swaps in the live snapshot.
+  - `useHistory` seeds its cache with the bundled series marked provisional. It renders it
+    immediately but still fetches, and replaces it with the live series.
+- **Rationale**: Frontend Mentor's screenshot bot captured "Loading live rates…". Bundling makes the
+  first paint complete without waiting on the network, and adds about 6 KB to the bundle.
+- **Alternatives considered**:
+  - Preconnect hints only: still races the bot.
+  - Server-side rendering: a new runtime, which conflicts with Principle V.
+  - Asking Frontend Mentor to recapture: doesn't fix the loading flash for real users.
+
 ## R13. Repository and deployment (deferred intents from the constitution)
 
 - **Decision**: A single frontend repo named `fsdev-foreign-exchange-checker`. No backend repo,

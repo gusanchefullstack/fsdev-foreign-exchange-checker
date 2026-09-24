@@ -535,6 +535,28 @@ spec draft and plan)
 
 ---
 
+## Phase 14: Amendment — build-time rate bundle (FR-054)
+
+**Goal**: The first paint shows real rates, so Frontend Mentor's thumbnail and users on slow networks
+never see "Loading live rates…".
+
+**Independent Test**: With the network blocked, the production build still renders the converter,
+ticker and default 1M chart from bundled data. Once live data loads, it replaces the bundle.
+
+- [X] T099 Create `scripts/fetch-rates.mjs`. It fetches `/v2/currencies`, `/v2/rates?base=USD&quotes=<catalog>&from=<today-10d>` and `/v2/rates?base=USD&quotes=EUR&from=<today-1 month>`, then writes `src/data/bootstrap.json` as `{ generatedAt, currencies, rows, history }`. On any fetch error it keeps the existing file and exits 0. Wire it up as the `prebuild` script in `package.json`, and commit an initial `src/data/bootstrap.json`
+- [X] T100 Tests in `src/hooks/useRates.test.ts` and `src/data/bootstrap.test.ts`:
+  - The bootstrap data parses into a valid snapshot and currency list
+  - `useRates` is `ready` on the first render (no `loading`)
+  - The live snapshot replaces the bundle
+  - `stale` is true only when the bundled date is more than 4 days old
+  - When live requests fail, the newer of the cached and bundled snapshots is used
+- [X] T101 Implement `src/data/bootstrap.ts` (parse and validate the JSON using the same row grouping as `fetchLatestSnapshot`) and update `src/hooks/useRates.ts` to start from it (FR-054)
+- [X] T102 Seed `useHistory` with the bundled USD→EUR 1M series as a provisional cache entry. It renders immediately and is replaced by the live fetch. Add tests in `src/hooks/useHistory.test.ts`
+- [ ] T103 Run lint, test and build, deploy, and check with the network blocked in DevTools that the first paint shows the converter and chart
+- [ ] T104 After the user confirms, ask the `frontendmentor-submitter` agent to change the solution's live URL to `https://fsdev-foreign-exchange-checker.vercel.app/?from=USD&to=EUR` to force a new screenshot, then check the thumbnail
+
+---
+
 ## Dependencies & Execution Order
 
 ### Phase Dependencies

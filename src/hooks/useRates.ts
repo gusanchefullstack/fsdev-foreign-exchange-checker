@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { RatesError, fetchCurrencies, fetchLatestSnapshot, sortCurrencies } from '../services/frankfurter'
+import { getBootstrap } from '../data/bootstrap'
 import { CATALOG_CODES, CURRENCY_CATALOG, POPULAR_CODES, flagSrc } from '../data/currencyCatalog'
 import type { Currency, CurrencyCode, RatesErrorCode, RatesSnapshot } from '../types'
 import { changePct, crossRate } from '../utils/rates'
@@ -48,11 +49,12 @@ function currenciesFromSnapshot(snapshot: Pick<RatesSnapshot, 'latest'>): Curren
 
 /** Loads the currency list and the latest rates once, with a cached fallback (FR-051). */
 export function useRates(): RatesState {
-  const [state, setState] = useState<Pick<RatesState, 'status' | 'currencies' | 'snapshot' | 'errorCode'>>({
-    status: 'loading',
-    currencies: [],
-    snapshot: null,
-    errorCode: null,
+  // First paint uses the build-time bundle when there is one (FR-054), so there's no loading state.
+  const [state, setState] = useState<Pick<RatesState, 'status' | 'currencies' | 'snapshot' | 'errorCode'>>(() => {
+    const bundle = getBootstrap()
+    return bundle
+      ? { status: 'ready', currencies: bundle.currencies, snapshot: bundle.snapshot, errorCode: null }
+      : { status: 'loading', currencies: [], snapshot: null, errorCode: null }
   })
 
   useEffect(() => {
@@ -73,9 +75,17 @@ export function useRates(): RatesState {
       .catch((err: unknown) => {
         if (cancelled) return
         const errorCode = err instanceof RatesError ? err.code : 'unknown'
-        // Fall back to the last successful rates, flagged as stale.
+        // Fall back to the newer of the cached and bundled rates, flagged as stale (FR-051, FR-054).
         const cached = readStored(CACHE_KEY, validateCachedSnapshot)
-        if (cached) {
+        const bundle = getBootstrap()
+        if (bundle && (!cached || bundle.snapshot.date >= cached.date)) {
+          setState({
+            status: 'ready',
+            currencies: bundle.currencies,
+            snapshot: { ...bundle.snapshot, stale: true },
+            errorCode,
+          })
+        } else if (cached) {
           setState({
             status: 'ready',
             currencies: currenciesFromSnapshot(cached),

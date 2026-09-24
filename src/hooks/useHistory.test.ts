@@ -49,3 +49,39 @@ describe('useHistory', () => {
     await waitFor(() => expect(String(fetchFn.mock.calls.at(-1)![0])).toContain('base=GBP&quotes=JPY'))
   })
 })
+
+describe('useHistory with the build-time bundle (FR-054)', () => {
+  it('renders the bundled USD→EUR 1M series immediately, then replaces it with live data', async () => {
+    const { testBootstrap } = await import('../../tests/setup')
+    clearHistoryCache()
+    testBootstrap.current = {
+      currencies: [],
+      snapshot: { date: '2026-09-24', latest: { USD: 1 }, previous: { USD: 1 }, fetchedAt: 0, stale: false },
+      history: [
+        { date: '2026-09-23', rate: 0.9 },
+        { date: '2026-09-24', rate: 0.91 },
+      ],
+    }
+    mockApi()
+    const { result } = renderHook(() => useHistory({ from: 'USD', to: 'EUR' }, '1M'))
+    expect(result.current.status).toBe('ready')
+    expect(result.current.series!.last).toBe(0.91)
+    await waitFor(() => expect(result.current.series!.points).toHaveLength(30))
+  })
+
+  it('does not use the bundle for other pairs or ranges', async () => {
+    const { testBootstrap } = await import('../../tests/setup')
+    clearHistoryCache()
+    testBootstrap.current = {
+      currencies: [],
+      snapshot: { date: '2026-09-24', latest: { USD: 1 }, previous: { USD: 1 }, fetchedAt: 0, stale: false },
+      history: [
+        { date: '2026-09-23', rate: 0.9 },
+        { date: '2026-09-24', rate: 0.91 },
+      ],
+    }
+    mockApi()
+    const { result } = renderHook(() => useHistory({ from: 'USD', to: 'EUR' }, '1W'))
+    expect(result.current.status).toBe('loading')
+  })
+})

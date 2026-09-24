@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import { getBootstrap } from '../data/bootstrap'
+import { DEFAULT_PAIR } from '../data/currencyCatalog'
 import { fetchHistory } from '../services/frankfurter'
 import type { CurrencyPair, HistoryRange, HistorySeries } from '../types'
 import { historyStats } from '../utils/rates'
@@ -11,10 +13,21 @@ const keyOf = (pair: CurrencyPair, range: HistoryRange) => `${pair.from}-${pair.
 
 export const clearHistoryCache = () => cache.clear()
 
+const BUNDLED_KEY = `${DEFAULT_PAIR.from}-${DEFAULT_PAIR.to}-1M`
+
+/** Default pair + 1M from the build-time bundle (FR-054): shown at once, replaced by the live fetch. */
+function bundledSeries(key: string): HistorySeries | null {
+  if (key !== BUNDLED_KEY) return null
+  const bundle = getBootstrap()
+  const result = bundle && historyStats(bundle.history, '1M')
+  return result ? { pair: DEFAULT_PAIR, range: '1M', points: result.points, ...result.stats } : null
+}
+
 function fromCache(key: string): HistoryState | null {
   const hit = cache.get(key)
-  if (!hit || hit === 'error') return null
-  return { status: 'ready', series: hit }
+  if (hit && hit !== 'error') return { status: 'ready', series: hit }
+  const bundled = bundledSeries(key)
+  return bundled ? { status: 'ready', series: bundled } : null
 }
 
 /** Rate history for the active pair and range (FR-019–FR-023). */
@@ -26,7 +39,9 @@ export function useHistory(pair: CurrencyPair, range: HistoryRange): HistoryStat
   }))
 
   useEffect(() => {
-    if (fromCache(key)) return
+    // Only a live result in the cache skips the fetch; bundled data is always refreshed.
+    const hit = cache.get(key)
+    if (hit && hit !== 'error') return
     let cancelled = false
     fetchHistory(pair, range)
       .then((points) => {
@@ -48,6 +63,7 @@ export function useHistory(pair: CurrencyPair, range: HistoryRange): HistoryStat
 
   // A cached key renders straight away; a new key shows "loading" until its fetch resolves,
   // never the previous pair's data.
+  if (state.key === key && state.value.status === 'ready') return state.value
   const cached = fromCache(key)
   if (cached) return cached
   if (state.key !== key) return { status: 'loading', series: null }

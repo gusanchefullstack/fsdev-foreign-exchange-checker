@@ -31,7 +31,16 @@ if (!globalThis.crypto?.randomUUID) {
   })
 }
 
+// The build-time rate bundle (FR-054) is off by default so tests control first paint;
+// bundle-specific tests call setBootstrapForTests().
+vi.mock('../src/data/bootstrap', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../src/data/bootstrap')>()
+  return { ...actual, getBootstrap: () => testBootstrap.current }
+})
+export const testBootstrap: { current: import('../src/data/bootstrap').Bootstrap | null } = { current: null }
+
 beforeEach(() => {
+  testBootstrap.current = null
   setMatchMedia(() => false)
   localStorage.clear()
   window.history.replaceState(null, '', '/')
