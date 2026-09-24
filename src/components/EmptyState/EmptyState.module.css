@@ -1,0 +1,28 @@
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-200);
+  padding: 40px var(--space-200);
+  text-align: center;
+}
+
+.title {
+  color: var(--color-text-soft);
+  font-size: var(--text-preset-2-size);
+  line-height: var(--text-preset-2-line);
+  letter-spacing: var(--text-preset-2-tracking);
+}
+
+.text {
+  max-width: 460px;
+  color: var(--color-text-muted);
+  font-size: var(--text-preset-4-size);
+  line-height: var(--text-preset-4-line);
+  letter-spacing: var(--text-preset-4-tracking);
+}
+
+/* Inline UI labels ("Send", "Log conversion") are written in normal case and shown uppercase (FR-045). */
+.text :global(.label) {
+  text-transform: uppercase;
+}

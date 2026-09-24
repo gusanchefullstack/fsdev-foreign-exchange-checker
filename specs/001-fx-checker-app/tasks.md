@@ -36,15 +36,15 @@ shortcuts, CSV, and announcement copy in `contracts/ui-contract.md`.
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Ask the user to confirm, then create the public GitHub repo `fsdev-foreign-exchange-checker` with `gh repo create` and add it as `origin` (Constitution: Versioning & Repository Policy says to create it first). Check that `.gitignore` still excludes `*.fig`, `*.sketch`, `*.xd`, then make the initial commit of the existing starter files and specs
-- [ ] T002 Initialize the Vite React TypeScript project in place at the repo root (package name `fsdev-foreign-exchange-checker`): `package.json` with scripts `dev`, `build` (`tsc -b && vite build`), `preview`, `lint`, `test` (`vitest run`), `test:watch`; dependencies `react@19`, `react-dom@19`; devDependencies `vite@8`, `@vitejs/plugin-react`, `typescript@6`, `@types/react`, `@types/react-dom`
-- [ ] T003 Create `tsconfig.json`, `tsconfig.app.json`, and `tsconfig.node.json` with `"strict": true`, `"noUncheckedIndexedAccess": true`, target ES2022, and `jsx: react-jsx`
-- [ ] T004 Create `vite.config.ts` with the React plugin and a Vitest `test` block (`environment: 'jsdom'`, `setupFiles: ['tests/setup.ts']`, `css.modules.classNameStrategy: 'non-scoped'`, `globals: true`)
-- [ ] T005 [P] Install and configure the test tooling: `vitest@5`, `jsdom`, `@testing-library/react`, `@testing-library/user-event`, `@testing-library/jest-dom`, `vitest-axe`. Create `tests/setup.ts`, which registers the jest-dom and vitest-axe matchers, stubs `matchMedia` and `crypto.randomUUID`, and exports `mockFetch(routes)`, a helper that answers URLs matching regexes with JSON bodies from `contracts/frankfurter-api.md`
-- [ ] T006 [P] Configure ESLint (flat config) in `eslint.config.js` with `typescript-eslint`, `eslint-plugin-react-hooks`, `eslint-plugin-react-refresh`, and `eslint-plugin-jsx-a11y` (recommended rules)
-- [ ] T007 Move `assets/` to `public/assets/` with `git mv` so `/assets/images/...` and `/assets/fonts/...` URLs work in dev and build. Update the favicon path in `index.html` to `/assets/images/favicon-32x32.png`
-- [ ] T008 Rewrite `index.html` as the Vite entry: `lang="en"`, the viewport meta, the title `Frontend Mentor | FX Checker`, a meta description, `<div id="root"></div>`, and `<script type="module" src="/src/main.tsx">`. Keep the starter's static copy by moving it to `specs/001-fx-checker-app/starter-copy.md` for reference, since all copy is rendered by React
-- [ ] T009 Create the empty source tree from plan.md: `src/{styles,types,data,services,hooks,utils,components}/`, plus `src/main.tsx` (renders `<App/>` in `StrictMode` and imports `styles/fonts.css`, `styles/tokens.css`, `styles/global.css`) and a placeholder `src/App.tsx`
+- [X] T001 Ask the user to confirm, then create the public GitHub repo `fsdev-foreign-exchange-checker` with `gh repo create` and add it as `origin` (Constitution: Versioning & Repository Policy says to create it first). Check that `.gitignore` still excludes `*.fig`, `*.sketch`, `*.xd`, then make the initial commit of the existing starter files and specs
+- [X] T002 Initialize the Vite React TypeScript project in place at the repo root (package name `fsdev-foreign-exchange-checker`): `package.json` with scripts `dev`, `build` (`tsc -b && vite build`), `preview`, `lint`, `test` (`vitest run`), `test:watch`; dependencies `react@19`, `react-dom@19`; devDependencies `vite@8`, `@vitejs/plugin-react`, `typescript@6`, `@types/react`, `@types/react-dom`
+- [X] T003 Create `tsconfig.json`, `tsconfig.app.json`, and `tsconfig.node.json` with `"strict": true`, `"noUncheckedIndexedAccess": true`, target ES2022, and `jsx: react-jsx`
+- [X] T004 Create `vite.config.ts` with the React plugin and a Vitest `test` block (`environment: 'jsdom'`, `setupFiles: ['tests/setup.ts']`, `css.modules.classNameStrategy: 'non-scoped'`, `globals: true`)
+- [X] T005 [P] Install and configure the test tooling: `vitest@5`, `jsdom`, `@testing-library/react`, `@testing-library/user-event`, `@testing-library/jest-dom`, `vitest-axe`. Create `tests/setup.ts`, which registers the jest-dom and vitest-axe matchers, stubs `matchMedia` and `crypto.randomUUID`, and exports `mockFetch(routes)`, a helper that answers URLs matching regexes with JSON bodies from `contracts/frankfurter-api.md`
+- [X] T006 [P] Configure ESLint (flat config) in `eslint.config.js` with `typescript-eslint`, `eslint-plugin-react-hooks`, `eslint-plugin-react-refresh`, and `eslint-plugin-jsx-a11y` (recommended rules)
+- [X] T007 Move `assets/` to `public/assets/` with `git mv` so `/assets/images/...` and `/assets/fonts/...` URLs work in dev and build. Update the favicon path in `index.html` to `/assets/images/favicon-32x32.png`
+- [X] T008 Rewrite `index.html` as the Vite entry: `lang="en"`, the viewport meta, the title `Frontend Mentor | FX Checker`, a meta description, `<div id="root"></div>`, and `<script type="module" src="/src/main.tsx">`. Keep the starter's static copy by moving it to `specs/001-fx-checker-app/starter-copy.md` for reference, since all copy is rendered by React
+- [X] T009 Create the empty source tree from plan.md: `src/{styles,types,data,services,hooks,utils,components}/`, plus `src/main.tsx` (renders `<App/>` in `StrictMode` and imports `styles/fonts.css`, `styles/tokens.css`, `styles/global.css`) and a placeholder `src/App.tsx`
 
 **Checkpoint**: `npm run dev`, `npm run build`, `npm run lint`, and `npm test` (no tests yet) all succeed.
 
@@ -57,7 +57,7 @@ shell, and the announcer, which every story uses
 
 **⚠️ CRITICAL**: No user story work can start until this phase is complete
 
-- [ ] T010 [P] Create `src/styles/tokens.css` with every Figma variable from research R11 as CSS custom properties on `:root`:
+- [X] T010 [P] Create `src/styles/tokens.css` with every Figma variable from research R11 as CSS custom properties on `:root`:
   - Colors: `--color-lime-500: #cef739`, `--color-lime-800: #283300`, `--color-green-500: #42eb05`, `--color-red-500: #ff4141`, and `--color-neutral-{50,100,200,400,500,600,700,900}`
   - Spacing: `--space-025`…`--space-600` (2, 6, 8, 10, 12, 16, 20, 24, 32, 48 px)
   - Radius: `--radius-8/16/20/full`
@@ -65,22 +65,22 @@ shell, and the announcer, which every story uses
   - Semantic aliases: `--color-bg`, `--color-surface`, `--color-surface-raised`, `--color-border`, `--color-text`, `--color-text-muted`, `--color-accent`, `--color-up`, `--color-down`, `--focus-ring`
 
   Before writing it, check any value you're unsure of against the Figma design system node 100:53 with the figma-desktop MCP `get_variable_defs`
-- [ ] T011 [P] Create `src/styles/fonts.css` with `@font-face` for `JetBrains Mono` loading `/assets/fonts/jetbrains-mono/jetbrains-mono-variable.ttf` (`font-weight: 100 800`, `font-display: swap`)
-- [ ] T012 [P] Create `src/styles/global.css`:
+- [X] T011 [P] Create `src/styles/fonts.css` with `@font-face` for `JetBrains Mono` loading `/assets/fonts/jetbrains-mono/jetbrains-mono-variable.ttf` (`font-weight: 100 800`, `font-display: swap`)
+- [X] T012 [P] Create `src/styles/global.css`:
   - A modern reset and `box-sizing`
   - `body` on `--color-bg` with `--color-text` and JetBrains Mono
   - `:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px }`
   - A `.visually-hidden` utility
   - `@media (prefers-reduced-motion: reduce)`, which turns off animations and transitions
-- [ ] T013 [P] Create the domain types in `src/types/index.ts`: `CurrencyCode`, `Currency {code,name,flagSrc,popular}`, `CurrencyPair {from,to}`, `RatesSnapshot {date,latest,previous,fetchedAt,stale}`, `HistoryRange = '1D'|'1W'|'1M'|'3M'|'1Y'|'5Y'`, `HistoryPoint`, `HistorySeries`, `Favorite {from,to,pinnedAt}`, `ConversionLogEntry {id,timestamp,from,to,sendAmount,receivedAmount,rate}`, `TabId = 'history'|'compare'|'favorites'|'log'`, `Theme = 'dark'|'light'`, and `RatesErrorCode = 'network'|'not-found'|'invalid'|'unknown'`, exactly as in data-model.md
-- [ ] T014 [P] Create `src/data/currencyCatalog.ts`:
+- [X] T013 [P] Create the domain types in `src/types/index.ts`: `CurrencyCode`, `Currency {code,name,flagSrc,popular}`, `CurrencyPair {from,to}`, `RatesSnapshot {date,latest,previous,fetchedAt,stale}`, `HistoryRange = '1D'|'1W'|'1M'|'3M'|'1Y'|'5Y'`, `HistoryPoint`, `HistorySeries`, `Favorite {from,to,pinnedAt}`, `ConversionLogEntry {id,timestamp,from,to,sendAmount,receivedAmount,rate}`, `TabId = 'history'|'compare'|'favorites'|'log'`, `Theme = 'dark'|'light'`, and `RatesErrorCode = 'network'|'not-found'|'invalid'|'unknown'`, exactly as in data-model.md
+- [X] T014 [P] Create `src/data/currencyCatalog.ts`:
   - `CURRENCY_CATALOG`: code → `{ iso2, name }` for the 57 codes mapped from `public/assets/images/flags/*.webp` (research R3). Leave out BGN, CYP, and HRK; `hm` is unused. Use the design names where they differ from the API ("US Dollar", "UAE Dirham", "Chinese Yuan", "Euro", "British Pound")
   - `POPULAR_CODES = ['USD','EUR','GBP']`
   - `TICKER_PAIRS`: EUR/USD, USD/JPY, GBP/USD, USD/CHF, EUR/GBP, AUD/USD, USD/CAD
   - `COMPARE_CODES = ['GBP','JPY','CHF','CAD','AUD','INR','CNY','BDT']`
   - `DEFAULT_PAIR = {from:'USD',to:'EUR'}`, `DEFAULT_AMOUNT = 1000`
-- [ ] T015 [P] Create the pure rate math in `src/utils/rates.ts`: `crossRate(snapshotRates, from, to)` (`latest[to]/latest[from]`, where `USD` = 1), `changePct(latest, previous)`, and `historyStats(points, range)`, which returns `{open,last,change,changePct,high,low,mid}`. For `'1D'`, open is the second-to-last point and the chart points are the last 5. For other ranges, it's first versus last. Add unit tests in `src/utils/rates.test.ts`, including checking against the known cross rates EUR/GBP = 0.75296/0.87638 ≈ 0.85917
-- [ ] T016 [P] Create the formatting utilities in `src/utils/format.ts`:
+- [X] T015 [P] Create the pure rate math in `src/utils/rates.ts`: `crossRate(snapshotRates, from, to)` (`latest[to]/latest[from]`, where `USD` = 1), `changePct(latest, previous)`, and `historyStats(points, range)`, which returns `{open,last,change,changePct,high,low,mid}`. For `'1D'`, open is the second-to-last point and the chart points are the last 5. For other ranges, it's first versus last. Add unit tests in `src/utils/rates.test.ts`, including checking against the known cross rates EUR/GBP = 0.75296/0.87638 ≈ 0.85917
+- [X] T016 [P] Create the formatting utilities in `src/utils/format.ts`:
   - `formatAmount(n)`: grouping, 2 dp below 100,000 and 0 dp at 100,000+ (FR-007)
   - `formatRate(n)`: 4 dp below 10, 3 dp from 10 to 99.99, 2 dp at 100+ (FR-002)
   - `formatPct(n)`: signed with ▲/▼, 2 dp
@@ -89,24 +89,24 @@ shell, and the announcer, which every story uses
 
   Add unit tests in `src/utils/format.test.ts`, including the boundaries 9.9999/10, 99.999/100
   (rates) and 99,999.99/100,000 (amounts)
-- [ ] T017 Create the API service in `src/services/frankfurter.ts`, following `contracts/frankfurter-api.md`:
+- [X] T017 Create the API service in `src/services/frankfurter.ts`, following `contracts/frankfurter-api.md`:
   - A private `getJson(url)` with an 8 s `AbortController` timeout that maps failures to `RatesError { code: RatesErrorCode }`: 404 → `not-found`, 422 → `invalid`, fetch/abort → `network`, anything else → `unknown`
   - `fetchCurrencies()`: `GET /v2/currencies`, returns the entries whose code is in `CURRENCY_CATALOG` as `Currency[]`, ordered Popular first then alphabetical
   - `fetchLatestSnapshot(codes)`: `GET /v2/rates?base=USD&quotes=…&from={today−10d}`, groups by quote and takes the last two dates as `latest`/`previous`
   - `fetchHistory(pair, range)`: `from`/`group` per the research R5 table
 
   Only this module calls `fetch`. Add tests in `src/services/frankfurter.test.ts` using `mockFetch`, covering each error mapping
-- [ ] T018 [P] Create `src/hooks/usePersistentState.ts`: `usePersistentState<T>(key, defaultValue, validate)`. It reads `fx:v1:${key}` inside try/catch plus `validate` (falling back to the default when data is invalid or missing), writes on change, and silently stays in memory when storage throws (FR-039, `contracts/storage.md`). Add tests in `src/hooks/usePersistentState.test.ts` covering corrupt JSON, an invalid shape, and storage that throws
-- [ ] T019 [P] Create `src/components/LiveAnnouncer/LiveAnnouncer.tsx`: a context provider that renders one visually hidden `<div aria-live="polite" aria-atomic="true">`, plus a `useAnnounce()` hook that returns `announce(message)`. It clears and resets the text so a repeated message is re-announced
-- [ ] T020 [P] Create `src/components/Flag/Flag.tsx` and `Flag.module.css`: a round flag image (`alt=""`, since it's decorative next to the code) with an `onError` fallback to a neutral circle that shows the currency code (spec edge case "Flag image fails to load")
-- [ ] T021 [P] Create `src/components/EmptyState/EmptyState.tsx` and `EmptyState.module.css`: a title plus a description, styled per the Figma empty frames (nodes 334:8158, 334:8347, 338:8598, 338:8713)
-- [ ] T022 Create `src/hooks/useRates.ts`. It loads `fetchCurrencies` and `fetchLatestSnapshot` on mount and exposes `{status:'loading'|'ready'|'error', currencies, snapshot, errorCode, rate(from,to), change(from,to)}`. It writes a successful snapshot to `fx:v1:rates` (cache writing only; reading the cache comes in US8)
-- [ ] T023 Create the layout shell in `src/App.tsx` and `src/App.module.css`:
+- [X] T018 [P] Create `src/hooks/usePersistentState.ts`: `usePersistentState<T>(key, defaultValue, validate)`. It reads `fx:v1:${key}` inside try/catch plus `validate` (falling back to the default when data is invalid or missing), writes on change, and silently stays in memory when storage throws (FR-039, `contracts/storage.md`). Add tests in `src/hooks/usePersistentState.test.ts` covering corrupt JSON, an invalid shape, and storage that throws
+- [X] T019 [P] Create `src/components/LiveAnnouncer/LiveAnnouncer.tsx`: a context provider that renders one visually hidden `<div aria-live="polite" aria-atomic="true">`, plus a `useAnnounce()` hook that returns `announce(message)`. It clears and resets the text so a repeated message is re-announced
+- [X] T020 [P] Create `src/components/Flag/Flag.tsx` and `Flag.module.css`: a round flag image (`alt=""`, since it's decorative next to the code) with an `onError` fallback to a neutral circle that shows the currency code (spec edge case "Flag image fails to load")
+- [X] T021 [P] Create `src/components/EmptyState/EmptyState.tsx` and `EmptyState.module.css`: a title plus a description, styled per the Figma empty frames (nodes 334:8158, 334:8347, 338:8598, 338:8713)
+- [X] T022 Create `src/hooks/useRates.ts`. It loads `fetchCurrencies` and `fetchLatestSnapshot` on mount and exposes `{status:'loading'|'ready'|'error', currencies, snapshot, errorCode, rate(from,to), change(from,to)}`. It writes a successful snapshot to `fx:v1:rates` (cache writing only; reading the cache comes in US8)
+- [X] T023 Create the layout shell in `src/App.tsx` and `src/App.module.css`:
   - `LiveAnnouncerProvider` wrapping a `<header>` slot, a ticker slot, and a single `<main>` with a visually hidden `<h1>FX Checker</h1>`
   - The "Check the rate" `<section>` (h2) and the tabs region
   - A centered 1100px content column on desktop, full width with 16–20px side padding on tablet and mobile (Figma frames 75:175, 237:1176, 237:1337)
   - Wire in `useRates`
-- [ ] T024 Create the base `src/components/Tabs/Tabs.tsx` and `Tabs.module.css`:
+- [X] T024 Create the base `src/components/Tabs/Tabs.tsx` and `Tabs.module.css`:
   - A WAI-ARIA tablist (`role="tablist"`, `role="tab"` with `aria-selected`/`aria-controls`, `role="tabpanel"` with `aria-labelledby`), manual activation, and ←/→/Home/End keys
   - Tabs: History, Compare, Favorites (badge), Log (badge)
   - `activeTab` held in `App` state, defaulting to `'history'`
@@ -131,13 +131,13 @@ line. Change the amount and both currencies, and swap. Every value matches the r
 
 > Write these first and confirm they fail before implementing
 
-- [ ] T025 [P] [US1] Converter behavior tests in `src/components/Converter/Converter.test.tsx`:
+- [X] T025 [P] [US1] Converter behavior tests in `src/components/Converter/Converter.test.tsx`:
   - The defaults are 1,000 USD→EUR, the received amount is `amount × rate` to 2 dp, and the rate line reads `1 USD = 0.8764 EUR`
   - Typing updates the result on every keystroke
   - An empty amount shows a blank result
   - Non-numeric characters are rejected
   - Swap keeps the amount and inverts the pair
-- [ ] T026 [P] [US1] Picker tests in `src/components/CurrencyPicker/CurrencyPicker.test.tsx`:
+- [X] T026 [P] [US1] Picker tests in `src/components/CurrencyPicker/CurrencyPicker.test.tsx`:
   - The groups "Popular" (3) and "Other currencies" (N−3) with counts
   - The check on the selected currency
   - Search by code and by name, ignoring case ("yen", "jp")
@@ -150,13 +150,13 @@ line. Change the amount and both currencies, and swap. Every value matches the r
 
 ### Implementation for User Story 1
 
-- [ ] T027 [US1] Create `src/components/CurrencyPicker/CurrencyPicker.tsx` and `CurrencyPicker.module.css`:
+- [X] T027 [US1] Create `src/components/CurrencyPicker/CurrencyPicker.tsx` and `CurrencyPicker.module.css`:
   - The trigger button (flag, code, chevron icon from `/assets/images/icon-chevron-down.svg`) with `aria-haspopup="listbox"` and `aria-expanded`
   - A popover (376px wide on desktop, full width on mobile, per Figma 266:6113 and 332:6918) with a search input (`role="combobox"`, `aria-controls`, `aria-activedescendant`, placeholder "Search currencies...", search icon)
   - A `role="listbox"` with two `role="group"` sections, each with a heading label and count
   - Options showing flag, code, and name, with a check icon (`/assets/images/icon-check.svg`) and `aria-selected` on the current one
   - Filtering by code or name ignoring case, keyboard navigation, and closing on Escape, outside click, or selection, with focus returning to the trigger (FR-008–FR-012)
-- [ ] T028 [US1] Create `src/components/Converter/Converter.tsx` and `Converter.module.css`, per Figma 75:175:
+- [X] T028 [US1] Create `src/components/Converter/Converter.tsx` and `Converter.module.css`, per Figma 75:175:
   - The Send panel: label "Send", a numeric text input with `inputMode="decimal"` and an accessible label, and a `CurrencyPicker`
   - A swap icon button (`/assets/images/icon-exchange.svg`, with `icon-exchange-vertical.svg` on mobile) with `aria-label="Swap currencies"`
   - The Receive panel: label "Receive", the converted amount in lime (`<output>`), and a `CurrencyPicker`
@@ -164,12 +164,12 @@ line. Change the amount and both currencies, and swap. Every value matches the r
   - Placeholder slots for the Favorite and Log conversion buttons, which come in US2 and US3
 
   The amount input shows grouped formatting when it isn't focused (FR-001–FR-004, FR-007)
-- [ ] T029 [US1] In `src/App.tsx`, lift converter state (`amountInput`, `pair`) into `App`:
+- [X] T029 [US1] In `src/App.tsx`, lift converter state (`amountInput`, `pair`) into `App`:
   - Implement the same-currency rule: choosing the other side's currency swaps the pair (data-model CurrencyPair)
   - Render `Converter` inside the "Check the rate" section
   - Show a loading skeleton while `useRates` is loading, and friendly copy ("Live rates are unavailable right now. Please try again in a minute.") when it has errored (FR-052, FR-053)
-- [ ] T030 [US1] Announce the converted amount through `useAnnounce`, debounced 500 ms, as "1,000 USD equals 853.02 EUR" (`contracts/ui-contract.md`), in `src/components/Converter/Converter.tsx`
-- [ ] T031 [US1] Make the converter responsive in `src/components/Converter/Converter.module.css`: side-by-side panels on desktop and tablet, stacked with a vertical swap icon on mobile (Figma 237:1337), no overflow at 320px, and large amounts (999,999,999,999) shrink or wrap without overflowing
+- [X] T030 [US1] Announce the converted amount through `useAnnounce`, debounced 500 ms, as "1,000 USD equals 853.02 EUR" (`contracts/ui-contract.md`), in `src/components/Converter/Converter.tsx`
+- [X] T031 [US1] Make the converter responsive in `src/components/Converter/Converter.module.css`: side-by-side panels on desktop and tablet, stacked with a vertical swap icon on mobile (Figma 237:1337), no overflow at 320px, and large amounts (999,999,999,999) shrink or wrap without overflowing
 
 **Checkpoint**: The MVP works on its own. Conversion, picker, and swap are complete, and the US1 tests pass.
 

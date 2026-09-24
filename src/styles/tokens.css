@@ -1,0 +1,112 @@
+/* Design tokens from the Figma design system (node 100:53). Change values here, not in components. */
+:root {
+  /* Color primitives */
+  --color-lime-500: #cef739;
+  --color-lime-800: #283300;
+  --color-green-500: #42eb05;
+  --color-red-500: #ff4141;
+  --color-neutral-50: #ffffff;
+  --color-neutral-100: #c6c6c6;
+  --color-neutral-200: #9d9d9d;
+  --color-neutral-400: #3d3d3d;
+  --color-neutral-500: #2e2e2e;
+  --color-neutral-600: #202022;
+  --color-neutral-700: #171719;
+  --color-neutral-900: #0a0a0a;
+
+  /* Spacing */
+  --space-025: 2px;
+  --space-075: 6px;
+  --space-100: 8px;
+  --space-125: 10px;
+  --space-150: 12px;
+  --space-200: 16px;
+  --space-250: 20px;
+  --space-300: 24px;
+  --space-400: 32px;
+  --space-600: 48px;
+
+  /* Corner radius */
+  --radius-8: 8px;
+  --radius-16: 16px;
+  --radius-20: 20px;
+  --radius-full: 999px;
+
+  /* Typography (JetBrains Mono presets) */
+  --font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --text-preset-1-size: 40px;
+  --text-preset-1-weight: 700;
+  --text-preset-1-line: 1;
+  --text-preset-1-tracking: -0.5px;
+  --text-preset-2-size: 20px;
+  --text-preset-2-weight: 400;
+  --text-preset-2-line: 1.2;
+  --text-preset-2-tracking: -0.5px;
+  --text-preset-3-size: 16px;
+  --text-preset-3-line: 1.2;
+  --text-preset-3-tracking: 1px;
+  --text-preset-4-size: 14px;
+  --text-preset-4-line: 1.2;
+  --text-preset-4-tracking: 1px;
+  --text-preset-5-size: 12px;
+  --text-preset-5-line: 1.2;
+  --text-preset-5-tracking: 0.5px;
+  --text-preset-6-size: 10px;
+  --text-preset-6-line: 1;
+  --text-preset-6-tracking: 0;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-bold: 700;
+
+  /* Semantic aliases (dark theme, default) */
+  --color-bg: var(--color-neutral-900);
+  --color-surface: var(--color-neutral-700);
+  --color-surface-raised: var(--color-neutral-600);
+  --color-control: var(--color-neutral-500);
+  --color-border: var(--color-neutral-500);
+  --color-border-strong: var(--color-neutral-400);
+  --color-divider: var(--color-neutral-600);
+  --color-text: var(--color-neutral-50);
+  --color-text-soft: var(--color-neutral-100);
+  --color-text-muted: var(--color-neutral-200);
+  --color-accent: var(--color-lime-500);
+  --color-accent-soft: var(--color-lime-800);
+  --color-accent-text: var(--color-lime-500);
+  --color-on-accent: var(--color-neutral-900);
+  --color-up: var(--color-green-500);
+  --color-down: var(--color-red-500);
+  --focus-ring: var(--color-lime-500);
+  --shadow-card: 0 12px 40px 0 rgb(0 0 0 / 0.4);
+  --icon-filter: none;
+
+  color-scheme: dark;
+}
+
+/*
+ * Light theme (FR-047). Not designed in Figma: built per spec Assumption
+ * "UI not in the design" by reversing the same neutral scale. Up/down use
+ * darker shades so text meets 4.5:1 on white.
+ */
+:root[data-theme='light'] {
+  --color-bg: #f4f4f5;
+  --color-surface: var(--color-neutral-50);
+  --color-surface-raised: #f0f0f1;
+  --color-control: #e6e6e8;
+  --color-border: #dcdcdf;
+  --color-border-strong: #c6c6c6;
+  --color-divider: #e6e6e8;
+  --color-text: var(--color-neutral-900);
+  --color-text-soft: #3d3d3d;
+  --color-text-muted: #5c5c5f;
+  --color-accent: var(--color-lime-500);
+  --color-accent-soft: #eefcbf;
+  --color-accent-text: #4d6300;
+  --color-on-accent: var(--color-neutral-900);
+  --color-up: #1f7a00;
+  --color-down: #c4001a;
+  --focus-ring: #4d6300;
+  --shadow-card: 0 12px 40px 0 rgb(0 0 0 / 0.08);
+  --icon-filter: invert(1);
+
+  color-scheme: light;
+}
