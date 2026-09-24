@@ -2,13 +2,16 @@ import { useState } from 'react'
 import styles from './App.module.css'
 import { Converter } from './components/Converter/Converter'
 import { FavoritesPanel } from './components/FavoritesPanel/FavoritesPanel'
+import { LogPanel } from './components/LogPanel/LogPanel'
 import { LiveAnnouncerProvider, useAnnounce } from './components/LiveAnnouncer/LiveAnnouncer'
 import { PinButton } from './components/PinButton/PinButton'
 import { Tabs, type TabItem } from './components/Tabs/Tabs'
 import { DEFAULT_AMOUNT, DEFAULT_PAIR } from './data/currencyCatalog'
+import { useConversionLog } from './hooks/useConversionLog'
 import { useFavorites } from './hooks/useFavorites'
 import { useRates } from './hooks/useRates'
 import type { CurrencyPair, TabId } from './types'
+import { formatAmount, formatInputDisplay, parseAmountInput } from './utils/format'
 import { swapPair, withFrom, withTo } from './utils/pair'
 
 export default function App() {
@@ -24,11 +27,37 @@ function FxChecker() {
   const announce = useAnnounce()
   const rates = useRates()
   const favorites = useFavorites()
+  const log = useConversionLog()
   const [amountText, setAmountText] = useState(String(DEFAULT_AMOUNT))
   const [pair, setPair] = useState<CurrencyPair>(DEFAULT_PAIR)
   const [activeTab, setActiveTab] = useState<TabId>('history')
 
   const rate = rates.rate(pair.from, pair.to)
+  const amount = parseAmountInput(amountText).value
+  const canLog = amount !== null && amount > 0 && rate !== null
+
+  function logConversion() {
+    if (!canLog) return
+    const entry = log.add({ from: pair.from, to: pair.to, sendAmount: amount, rate })
+    announce(
+      `Conversion logged: ${formatInputDisplay(amountText)} ${pair.from} to ${formatAmount(entry.receivedAmount)} ${pair.to}`,
+    )
+  }
+
+  function deleteEntry(id: string) {
+    log.remove(id)
+    announce('Log entry deleted')
+  }
+
+  function clearLog() {
+    log.clearAll()
+    announce('Conversion log cleared. Undo available for 5 seconds')
+  }
+
+  function undoClear() {
+    log.undo()
+    announce('Conversion log restored')
+  }
 
   function togglePin(p: CurrencyPair) {
     const nowPinned = favorites.toggle(p)
@@ -44,7 +73,7 @@ function FxChecker() {
     { id: 'history', label: 'History' },
     { id: 'compare', label: 'Compare' },
     { id: 'favorites', label: 'Favorites', badge: favorites.favorites.length },
-    { id: 'log', label: 'Log' },
+    { id: 'log', label: 'Log', badge: log.entries.length },
   ]
 
   return (
@@ -75,12 +104,17 @@ function FxChecker() {
             onToChange={(code) => setPair((p) => withTo(p, code))}
             onSwap={() => setPair(swapPair)}
             actions={
-              <PinButton
-                withText
-                pinned={favorites.isPinned(pair)}
-                label={`Favorite ${pair.from} to ${pair.to}`}
-                onClick={() => togglePin(pair)}
-              />
+              <>
+                <PinButton
+                  withText
+                  pinned={favorites.isPinned(pair)}
+                  label={`Favorite ${pair.from} to ${pair.to}`}
+                  onClick={() => togglePin(pair)}
+                />
+                <button type="button" className={styles.logButton} disabled={!canLog} onClick={logConversion}>
+                  Log conversion
+                </button>
+              </>
             }
           />
         )}
@@ -94,6 +128,16 @@ function FxChecker() {
               change={rates.change}
               onSelect={setPair}
               onUnpin={unpin}
+            />
+          )}
+          {activeTab === 'log' && (
+            <LogPanel
+              entries={log.entries}
+              canUndo={log.canUndo}
+              onDelete={deleteEntry}
+              onClearAll={clearLog}
+              onUndo={undoClear}
+              onPauseUndo={log.pauseUndo}
             />
           )}
         </Tabs>

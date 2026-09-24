@@ -231,8 +231,8 @@ restored). Clear again and wait, and the empty state stays (quickstart V5).
 
 ### Tests for User Story 3
 
-- [ ] T038 [P] [US3] Unit tests in `src/utils/relativeTime.test.ts` for FR-035: "`<60 s → "now"`, `<60 min → "{m}m"`, `<24 h → "{h}h"`, else `"{d} {Mon}"`" (e.g., "13 May"), including the boundaries at 59 s, 60 s, 59 m, 23 h, and 24 h
-- [ ] T039 [P] [US3] Hook tests in `src/hooks/useConversionLog.test.ts` (fake timers):
+- [X] T038 [P] [US3] Unit tests in `src/utils/relativeTime.test.ts` for FR-035: "`<60 s → "now"`, `<60 min → "{m}m"`, `<24 h → "{h}h"`, else `"{d} {Mon}"`" (e.g., "13 May"), including the boundaries at 59 s, 60 s, 59 m, 23 h, and 24 h
+- [X] T039 [P] [US3] Hook tests in `src/hooks/useConversionLog.test.ts` (fake timers):
   - Log adds it newest first with `receivedAmount` rounded to 2 dp and the frozen `rate`
   - The 101st entry drops the oldest ("capped at 100")
   - Delete removes one
@@ -241,7 +241,7 @@ restored). Clear again and wait, and the empty state stays (quickstart V5).
   - The timer pauses while `pauseUndo(true)`
   - After 5 s, undo is no longer available
   - `add()` during the undo window clears `canUndo` and keeps only the new entry
-- [ ] T040 [P] [US3] Panel tests in `src/components/LogPanel/LogPanel.test.tsx`:
+- [X] T040 [P] [US3] Panel tests in `src/components/LogPanel/LogPanel.test.tsx`:
   - Rows show the relative time, the pair, and the send and receive amounts
   - Header "N logged"
   - The delete button (`aria-label` "Delete conversion USD to EUR, 1,000.00") works
@@ -252,8 +252,8 @@ restored). Clear again and wait, and the empty state stays (quickstart V5).
 
 ### Implementation for User Story 3
 
-- [ ] T041 [P] [US3] Create `src/utils/relativeTime.ts` with `formatRelativeTime(timestamp, now)` per FR-035, plus `formatAbsolute(timestamp)` for the `<time dateTime>` attribute
-- [ ] T042 [US3] Create `src/hooks/useConversionLog.ts` on top of `usePersistentState('log', [], validateLog)`:
+- [X] T041 [P] [US3] Create `src/utils/relativeTime.ts` with `formatRelativeTime(timestamp, now)` per FR-035, plus `formatAbsolute(timestamp)` for the `<time dateTime>` attribute
+- [X] T042 [US3] Create `src/hooks/useConversionLog.ts` on top of `usePersistentState('log', [], validateLog)`:
   - `add({from,to,sendAmount,rate})` creates `{id: crypto.randomUUID(), timestamp: Date.now(), receivedAmount: round2(sendAmount×rate)}`, prepends it, and slices to 100
   - `remove(id)`
   - `clearAll()` stores the previous entries in an in-memory `undoBuffer`, sets the entries to `[]`, and starts a 5000 ms timer
@@ -262,15 +262,15 @@ restored). Clear again and wait, and the empty state stays (quickstart V5).
   - `add()` and `remove()` discard the `undoBuffer` and cancel the timer
 
   (FR-033, FR-034, FR-036, data-model ConversionLogEntry)
-- [ ] T043 [US3] Add the "Log conversion" button to `src/components/Converter/Converter.tsx` (outlined lime style per Figma). It's disabled when `amount` is null or 0 or rates aren't ready. On click it calls `add` and announces "Conversion logged: 1,000 USD to 853.02 EUR" (FR-006, FR-043)
-- [ ] T044 [US3] Create `src/components/LogPanel/LogPanel.tsx` and `LogPanel.module.css`, per Figma 160:3998 and LoggedItem:
+- [X] T043 [US3] Add the "Log conversion" button to `src/components/Converter/Converter.tsx` (outlined lime style per Figma). It's disabled when `amount` is null or 0 or rates aren't ready. On click it calls `add` and announces "Conversion logged: 1,000 USD to 853.02 EUR" (FR-006, FR-043)
+- [X] T044 [US3] Create `src/components/LogPanel/LogPanel.tsx` and `LogPanel.module.css`, per Figma 160:3998 and LoggedItem:
   - The title "Conversion log" with the count "N logged" and a "Clear all" button
   - A `<ol>` of entries, each with a `<time>` showing the relative time, the pair, the send amount, the received amount, and a delete icon button (`icon-delete.svg`, `icon-delete-filled.svg` on hover)
   - After a clear: an Undo bar (built per spec Assumption "UI not in the design") ("Conversion log cleared" + "Undo" button) whose timer pauses on hover and focus
   - Announcements "Log entry deleted", "Conversion log cleared. Undo available for 5 seconds", and "Conversion log restored"
   - `EmptyState` with the copy from FR-037
   - Relative times refresh every 60 s
-- [ ] T045 [US3] In `src/App.tsx`, wire `useConversionLog` into `App`: the Log tab badge shows `entries.length`, and `LogPanel` renders in its tabpanel
+- [X] T045 [US3] In `src/App.tsx`, wire `useConversionLog` into `App`: the Log tab badge shows `entries.length`, and `LogPanel` renders in its tabpanel
 
 **Checkpoint**: US1–US3 work on their own.
 

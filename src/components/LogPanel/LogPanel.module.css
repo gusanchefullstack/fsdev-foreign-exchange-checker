@@ -1,0 +1,160 @@
+.emptyWrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-200);
+}
+
+.button {
+  padding: var(--space-100) var(--space-150);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-8);
+  color: var(--color-text-muted);
+  font-size: var(--text-preset-5-size);
+  line-height: var(--text-preset-5-line);
+  letter-spacing: var(--text-preset-5-tracking);
+  text-transform: uppercase;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.button:hover:not(:disabled) {
+  border-color: var(--color-text-muted);
+  color: var(--color-text);
+}
+
+.button:disabled {
+  opacity: 0.5;
+}
+
+.row {
+  gap: var(--space-200);
+  padding: var(--space-200);
+}
+
+.time {
+  flex-shrink: 0;
+  width: 64px;
+  color: var(--color-text-muted);
+  font-size: var(--text-preset-4-size);
+  line-height: var(--text-preset-4-line);
+  letter-spacing: var(--text-preset-4-tracking);
+}
+
+.upper {
+  text-transform: uppercase;
+}
+
+.pair {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-100);
+  min-width: 0;
+  font-size: var(--text-preset-4-size);
+  line-height: var(--text-preset-4-line);
+  letter-spacing: var(--text-preset-4-tracking);
+  white-space: nowrap;
+}
+
+.arrow {
+  color: var(--color-text-muted);
+}
+
+.amounts {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-250);
+  font-size: var(--text-preset-3-size);
+  line-height: var(--text-preset-3-line);
+  letter-spacing: var(--text-preset-3-tracking);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.sent {
+  color: var(--color-text-soft);
+}
+
+.received {
+  color: var(--color-accent-text);
+}
+
+.delete {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-8);
+  background: var(--color-surface-raised);
+  transition: border-color 0.15s ease;
+}
+
+.delete:hover {
+  border-color: var(--color-down);
+  color: var(--color-down);
+}
+
+.deleteIconHover {
+  display: none;
+}
+
+.delete:hover .deleteIcon {
+  display: none;
+}
+
+.delete:hover .deleteIconHover {
+  display: block;
+}
+
+.undo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-200);
+  padding: var(--space-150) var(--space-200);
+  border: 1px solid var(--color-accent);
+  border-radius: 10px;
+  background: var(--color-surface-raised);
+  font-size: var(--text-preset-5-size);
+  letter-spacing: var(--text-preset-5-tracking);
+}
+
+.undo .button {
+  border-color: var(--color-accent);
+  color: var(--color-accent-text);
+}
+
+/* Mobile LoggedItem: time above the pair, amounts stacked (Figma 325:6672). */
+@media (max-width: 767px) {
+  .row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    grid-template-areas:
+      'time amounts delete'
+      'pair amounts delete';
+    gap: var(--space-050, 4px) var(--space-125);
+    padding: var(--space-150);
+  }
+
+  .time {
+    grid-area: time;
+    width: auto;
+  }
+
+  .pair {
+    grid-area: pair;
+  }
+
+  .amounts {
+    flex-direction: column;
+    grid-area: amounts;
+    align-items: flex-end;
+    gap: var(--space-025);
+  }
+
+  .delete {
+    grid-area: delete;
+  }
+}
