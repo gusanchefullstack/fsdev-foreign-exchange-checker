@@ -76,3 +76,34 @@
   outline-offset: 4px;
   border-radius: var(--radius-8);
 }
+
+/* Mobile dropdown (Figma Components 151:2489). */
+.selectWrap {
+  position: relative;
+}
+
+.select {
+  width: 100%;
+  padding: var(--space-150) var(--space-400) var(--space-150) var(--space-125);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-8);
+  background: var(--color-surface);
+  font-size: var(--text-preset-3-size);
+  line-height: var(--text-preset-3-line);
+  letter-spacing: var(--text-preset-3-tracking);
+  text-transform: uppercase;
+  appearance: none;
+  cursor: pointer;
+}
+
+.select:hover {
+  border-color: var(--color-text-muted);
+}
+
+.chevron {
+  position: absolute;
+  top: 50%;
+  right: var(--space-150);
+  translate: 0 -50%;
+  pointer-events: none;
+}

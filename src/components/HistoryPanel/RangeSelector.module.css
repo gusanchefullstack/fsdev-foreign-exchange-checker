@@ -26,10 +26,6 @@
 }
 
 @media (max-width: 767px) {
-  .group {
-    align-self: flex-start;
-  }
-
   .option {
     padding: var(--space-125) var(--space-150);
   }

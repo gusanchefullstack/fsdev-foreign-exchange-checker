@@ -44,3 +44,40 @@ describe('Tabs', () => {
     expect(onChange).toHaveBeenCalledWith('log')
   })
 })
+
+describe('Tabs on mobile (US7)', () => {
+  it('renders a labelled native select with badge counts and switches panels', async () => {
+    const { setMatchMedia } = await import('../../../tests/setup')
+    setMatchMedia((q) => q.includes('max-width: 767px'))
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+    render(
+      <Tabs tabs={tabs} active="history" onChange={onChange}>
+        <p>History content</p>
+      </Tabs>,
+    )
+    const select = screen.getByRole('combobox', { name: 'View' })
+    expect(screen.queryByRole('tablist')).not.toBeInTheDocument()
+    expect(screen.getByRole('option', { name: 'Favorites (10)' })).toBeInTheDocument()
+    await user.selectOptions(select, 'log')
+    expect(onChange).toHaveBeenCalledWith('log')
+    expect(screen.getByRole('region', { name: 'History' })).toHaveTextContent('History content')
+  })
+})
+
+describe('Active tab persistence (US7)', () => {
+  it('remembers the last tab across reloads', async () => {
+    const { mockApi } = await import('../../../tests/fixtures')
+    const { default: App } = await import('../../App')
+    const user = userEvent.setup()
+    mockApi()
+    const first = render(<App />)
+    await screen.findByText('1 USD = 0.8764 EUR')
+    await user.click(screen.getByRole('tab', { name: 'Compare' }))
+    expect(localStorage.getItem('fx:v1:activeTab')).toBe('"compare"')
+    first.unmount()
+    render(<App />)
+    await screen.findByText('1 USD = 0.8764 EUR')
+    expect(screen.getByRole('tab', { name: 'Compare' })).toHaveAttribute('aria-selected', 'true')
+  })
+})

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import styles from './App.module.css'
 import { Converter } from './components/Converter/Converter'
 import { FavoritesPanel } from './components/FavoritesPanel/FavoritesPanel'
+import { Header } from './components/Header/Header'
 import { HistoryPanel } from './components/HistoryPanel/HistoryPanel'
 import { LogPanel } from './components/LogPanel/LogPanel'
 import { LiveAnnouncerProvider, useAnnounce } from './components/LiveAnnouncer/LiveAnnouncer'
@@ -10,10 +11,13 @@ import { Tabs, type TabItem } from './components/Tabs/Tabs'
 import { DEFAULT_AMOUNT, DEFAULT_PAIR } from './data/currencyCatalog'
 import { useConversionLog } from './hooks/useConversionLog'
 import { useFavorites } from './hooks/useFavorites'
+import { usePersistentState } from './hooks/usePersistentState'
 import { useRates } from './hooks/useRates'
 import type { CurrencyPair, HistoryRange, TabId } from './types'
 import { formatAmount, formatInputDisplay, parseAmountInput } from './utils/format'
 import { swapPair, withFrom, withTo } from './utils/pair'
+
+const TAB_IDS: TabId[] = ['history', 'compare', 'favorites', 'log']
 
 export default function App() {
   return (
@@ -31,7 +35,9 @@ function FxChecker() {
   const log = useConversionLog()
   const [amountText, setAmountText] = useState(String(DEFAULT_AMOUNT))
   const [pair, setPair] = useState<CurrencyPair>(DEFAULT_PAIR)
-  const [activeTab, setActiveTab] = useState<TabId>('history')
+  const [activeTab, setActiveTab] = usePersistentState<TabId>('activeTab', 'history', (v) =>
+    TAB_IDS.includes(v as TabId) ? (v as TabId) : null,
+  )
   const [range, setRange] = useState<HistoryRange>('1M')
 
   const rate = rates.rate(pair.from, pair.to)
@@ -79,74 +85,77 @@ function FxChecker() {
   ]
 
   return (
-    <main className={styles.content}>
-      <h1 className="visually-hidden">FX Checker currency converter</h1>
-      <section className={styles.section} aria-labelledby="converter-title">
-        <h2 id="converter-title" className={styles.sectionTitle}>
-          Check the rate
-        </h2>
-        {rates.status === 'loading' && (
-          <p className={styles.status} role="status">
-            Loading live rates…
-          </p>
-        )}
-        {rates.status === 'error' && (
-          <p className={styles.status} role="alert">
-            Live rates are unavailable right now. Please try again in a minute.
-          </p>
-        )}
-        {rates.status === 'ready' && (
-          <Converter
-            amountText={amountText}
-            onAmountChange={setAmountText}
-            pair={pair}
-            currencies={rates.currencies}
-            rate={rate}
-            onFromChange={(code) => setPair((p) => withFrom(p, code))}
-            onToChange={(code) => setPair((p) => withTo(p, code))}
-            onSwap={() => setPair(swapPair)}
-            actions={
-              <>
-                <PinButton
-                  withText
-                  pinned={favorites.isPinned(pair)}
-                  label={`Favorite ${pair.from} to ${pair.to}`}
-                  onClick={() => togglePin(pair)}
-                />
-                <button type="button" className={styles.logButton} disabled={!canLog} onClick={logConversion}>
-                  Log conversion
-                </button>
-              </>
-            }
-          />
-        )}
-      </section>
-      <section aria-label="Rate details">
-        <Tabs tabs={tabs} active={activeTab} onChange={setActiveTab}>
-          {activeTab === 'history' && rates.status !== 'loading' && (
-            <HistoryPanel pair={pair} range={range} onRangeChange={setRange} />
+    <>
+      <Header currencyCount={rates.status === 'ready' ? rates.currencies.length : null} />
+      <main className={styles.content}>
+        <h1 className="visually-hidden">FX Checker currency converter</h1>
+        <section className={styles.section} aria-labelledby="converter-title">
+          <h2 id="converter-title" className={styles.sectionTitle}>
+            Check the rate
+          </h2>
+          {rates.status === 'loading' && (
+            <p className={styles.status} role="status">
+              Loading live rates…
+            </p>
           )}
-          {activeTab === 'favorites' && (
-            <FavoritesPanel
-              favorites={favorites.favorites}
-              rate={rates.rate}
-              change={rates.change}
-              onSelect={setPair}
-              onUnpin={unpin}
+          {rates.status === 'error' && (
+            <p className={styles.status} role="alert">
+              Live rates are unavailable right now. Please try again in a minute.
+            </p>
+          )}
+          {rates.status === 'ready' && (
+            <Converter
+              amountText={amountText}
+              onAmountChange={setAmountText}
+              pair={pair}
+              currencies={rates.currencies}
+              rate={rate}
+              onFromChange={(code) => setPair((p) => withFrom(p, code))}
+              onToChange={(code) => setPair((p) => withTo(p, code))}
+              onSwap={() => setPair(swapPair)}
+              actions={
+                <>
+                  <PinButton
+                    withText
+                    pinned={favorites.isPinned(pair)}
+                    label={`Favorite ${pair.from} to ${pair.to}`}
+                    onClick={() => togglePin(pair)}
+                  />
+                  <button type="button" className={styles.logButton} disabled={!canLog} onClick={logConversion}>
+                    Log conversion
+                  </button>
+                </>
+              }
             />
           )}
-          {activeTab === 'log' && (
-            <LogPanel
-              entries={log.entries}
-              canUndo={log.canUndo}
-              onDelete={deleteEntry}
-              onClearAll={clearLog}
-              onUndo={undoClear}
-              onPauseUndo={log.pauseUndo}
-            />
-          )}
-        </Tabs>
-      </section>
-    </main>
+        </section>
+        <section aria-label="Rate details">
+          <Tabs tabs={tabs} active={activeTab} onChange={setActiveTab}>
+            {activeTab === 'history' && rates.status !== 'loading' && (
+              <HistoryPanel pair={pair} range={range} onRangeChange={setRange} />
+            )}
+            {activeTab === 'favorites' && (
+              <FavoritesPanel
+                favorites={favorites.favorites}
+                rate={rates.rate}
+                change={rates.change}
+                onSelect={setPair}
+                onUnpin={unpin}
+              />
+            )}
+            {activeTab === 'log' && (
+              <LogPanel
+                entries={log.entries}
+                canUndo={log.canUndo}
+                onDelete={deleteEntry}
+                onClearAll={clearLog}
+                onUndo={undoClear}
+                onPauseUndo={log.pauseUndo}
+              />
+            )}
+          </Tabs>
+        </section>
+      </main>
+    </>
   )
 }

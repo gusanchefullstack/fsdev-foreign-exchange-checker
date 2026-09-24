@@ -1,5 +1,7 @@
 import { useRef, type KeyboardEvent, type ReactNode } from 'react'
+import { MOBILE_QUERY, useMediaQuery } from '../../hooks/useMediaQuery'
 import type { TabId } from '../../types'
+import { Icon } from '../Icon/Icon'
 import styles from './Tabs.module.css'
 
 export interface TabItem {
@@ -22,6 +24,7 @@ const panelDomId = (id: TabId) => `panel-${id}`
 /** WAI-ARIA tabs with manual activation: arrows/Home/End move focus, Enter/Space selects. */
 export function Tabs({ tabs, active, onChange, children }: TabsProps) {
   const refs = useRef<(HTMLButtonElement | null)[]>([])
+  const isMobile = useMediaQuery(MOBILE_QUERY)
 
   function onKeyDown(e: KeyboardEvent<HTMLButtonElement>, index: number) {
     const last = tabs.length - 1
@@ -34,6 +37,36 @@ export function Tabs({ tabs, active, onChange, children }: TabsProps) {
     if (next === null) return
     e.preventDefault()
     refs.current[next]?.focus()
+  }
+
+  // Mobile: the tabs collapse into a native dropdown (FR-017).
+  if (isMobile) {
+    const current = tabs.find((t) => t.id === active)
+    return (
+      <div className={styles.tabs}>
+        <div className={styles.selectWrap}>
+          <label className="visually-hidden" htmlFor="view-select">
+            View
+          </label>
+          <select
+            id="view-select"
+            className={styles.select}
+            value={active}
+            onChange={(e) => onChange(e.target.value as TabId)}
+          >
+            {tabs.map((t) => (
+              <option key={t.id} value={t.id}>
+                {t.badge ? `${t.label} (${t.badge})` : t.label}
+              </option>
+            ))}
+          </select>
+          <Icon name="chevron-down" size={12} className={styles.chevron} />
+        </div>
+        <section aria-label={current?.label} className={styles.panel}>
+          {children}
+        </section>
+      </div>
+    )
   }
 
   return (

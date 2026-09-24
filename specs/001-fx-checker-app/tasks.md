@@ -331,11 +331,11 @@ tab is restored on reload (quickstart V10).
 
 ### Tests for User Story 7
 
-- [ ] T054 [P] [US7] Tests in `src/components/Tabs/Tabs.test.tsx`:
+- [X] T054 [P] [US7] Tests in `src/components/Tabs/Tabs.test.tsx`:
   - With `matchMedia('(max-width: 767px)')` matching, the tabs render as a native `<select>` labeled "View" with badge counts in the option text ("Favorites (10)")
   - Choosing an option switches the panel
   - The active tab persists to `fx:v1:activeTab` and is restored on remount
-- [ ] T055 [P] [US7] App-level accessibility test in `src/App.test.tsx`:
+- [X] T055 [P] [US7] App-level accessibility test in `src/App.test.tsx`:
   - Exactly one `<main>` and exactly one `<h1>`
   - No duplicate link text
   - Every interactive element is reachable in DOM order by `userEvent.tab()`
@@ -343,17 +343,17 @@ tab is restored on reload (quickstart V10).
 
 ### Implementation for User Story 7
 
-- [ ] T056 [US7] Extend `src/components/Tabs/Tabs.tsx` and its CSS with the mobile dropdown variant (`<label class="visually-hidden">View</label><select>`, styled per Figma Components 151:2489 with a chevron), switched with `useMediaQuery('(max-width: 767px)')` in `src/hooks/useMediaQuery.ts`
-- [ ] T057 [US7] Persist the active tab in `src/App.tsx` with `usePersistentState('activeTab','history', isTabId)` (FR-018)
-- [ ] T058 [US7] Create `src/components/Header/Header.tsx` and `Header.module.css`:
+- [X] T056 [US7] Extend `src/components/Tabs/Tabs.tsx` and its CSS with the mobile dropdown variant (`<label class="visually-hidden">View</label><select>`, styled per Figma Components 151:2489 with a chevron), switched with `useMediaQuery('(max-width: 767px)')` in `src/hooks/useMediaQuery.ts`
+- [X] T057 [US7] Persist the active tab in `src/App.tsx` with `usePersistentState('activeTab','history', isTabId)` (FR-018)
+- [X] T058 [US7] Create `src/components/Header/Header.tsx` and `Header.module.css`:
   - The logo `<img src="/assets/images/logo.svg" alt="FX Checker">`
   - The currency count text "{N} Currencies · EOD · ECB data" (uppercased with CSS)
   - The mobile header variant at 52px (Figma "Mobile Header") versus 66px on desktop
 
   Render it in `App` (FR-013)
-- [ ] T059 [US7] Do a responsive pass over `src/App.module.css` and every component's CSS against the Figma frames: Desktop 1440 (75:175, 151:2490, 160:2949, 160:3998), Tablet 768 (237:1176, 248:1583, 248:2178, 250:2914), and Mobile 375 (237:1337, 248:1878, 248:2200, 250:2936). Use mobile-first media queries at 768px and 1100px+, with no horizontal scroll from 320px to 1920px (FR-044, SC-006)
-- [ ] T060 [US7] Do a hover and focus pass on every interactive element in each `*.module.css`, matching the Figma Hover and Focus frames (266:5918, 276:5297, 349:7572, 276:6525, 276:7014, 349:7918). Check that the focus ring has at least 3:1 contrast and isn't hidden by `overflow` clipping (FR-041)
-- [ ] T061 [US7] Do a semantic and labels pass: all uppercase labels are written in normal case in the JSX and use `text-transform: uppercase` (FR-045); icon-only buttons have `aria-label`s; decorative icons use `alt=""` or `aria-hidden`; lists use `<ul>`/`<ol>`
+- [X] T059 [US7] Do a responsive pass over `src/App.module.css` and every component's CSS against the Figma frames: Desktop 1440 (75:175, 151:2490, 160:2949, 160:3998), Tablet 768 (237:1176, 248:1583, 248:2178, 250:2914), and Mobile 375 (237:1337, 248:1878, 248:2200, 250:2936). Use mobile-first media queries at 768px and 1100px+, with no horizontal scroll from 320px to 1920px (FR-044, SC-006)
+- [X] T060 [US7] Do a hover and focus pass on every interactive element in each `*.module.css`, matching the Figma Hover and Focus frames (266:5918, 276:5297, 349:7572, 276:6525, 276:7014, 349:7918). Check that the focus ring has at least 3:1 contrast and isn't hidden by `overflow` clipping (FR-041)
+- [X] T061 [US7] Do a semantic and labels pass: all uppercase labels are written in normal case in the JSX and use `text-transform: uppercase` (FR-045); icon-only buttons have `aria-label`s; decorative icons use `alt=""` or `aria-hidden`; lists use `<ul>`/`<ol>`
 
 **Checkpoint**: The P1 and P2 stories are complete and accessible on all devices.
 

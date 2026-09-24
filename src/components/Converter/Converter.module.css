@@ -22,6 +22,7 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-16);
   background: var(--color-surface-raised);
+  container-type: inline-size;
 }
 
 .label {
@@ -48,14 +49,16 @@
 .amount {
   display: block;
   width: 100%;
-  min-height: 41px;
+  height: 42px;
+  margin: 0;
   padding: 0 0 1px;
   border: 0;
   border-bottom: 1px solid var(--color-surface-raised);
   border-radius: 2px;
   background: none;
   color: var(--color-text);
-  font-size: var(--text-preset-1-size);
+  /* Scales down with the panel so amounts never truncate on small screens. */
+  font-size: min(var(--text-preset-1-size), 13cqi);
   font-weight: var(--text-preset-1-weight);
   line-height: var(--text-preset-1-line);
   letter-spacing: var(--text-preset-1-tracking);
@@ -83,11 +86,11 @@ input.amount:hover {
 }
 
 .small {
-  font-size: 30px;
+  font-size: min(30px, 9cqi);
 }
 
 .xsmall {
-  font-size: 22px;
+  font-size: min(22px, 7cqi);
 }
 
 .swap {
@@ -129,7 +132,13 @@ input.amount:hover {
 
 .actions {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: var(--space-150);
+}
+
+.actions > * {
+  white-space: nowrap;
 }
 
 /* Tablet: panels stay side by side but tighter. */
@@ -171,5 +180,19 @@ input.amount:hover {
 
   .rate {
     text-align: center;
+  }
+}
+
+@media (max-width: 400px) {
+  .top {
+    padding: var(--space-150);
+  }
+
+  .panel {
+    padding: var(--space-150);
+  }
+
+  .bottom {
+    padding: var(--space-150);
   }
 }
