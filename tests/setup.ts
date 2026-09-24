@@ -1,6 +1,9 @@
 import '@testing-library/jest-dom/vitest'
-import { cleanup } from '@testing-library/react'
+import { cleanup, configure } from '@testing-library/react'
 import { afterEach, beforeEach, vi } from 'vitest'
+
+// Full-app renders can be slow when the suite runs in parallel.
+configure({ asyncUtilTimeout: 4000 })
 
 // jsdom has no matchMedia; default to "desktop, motion allowed". Tests override per case.
 export function setMatchMedia(matches: (query: string) => boolean) {

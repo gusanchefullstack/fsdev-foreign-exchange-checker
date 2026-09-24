@@ -456,18 +456,18 @@ pair. An invalid URL falls back silently (quickstart V12).
 
 ### Tests for User Story 9
 
-- [ ] T072 [P] [US9] Tests in `src/hooks/useUrlPair.test.ts`:
+- [X] T072 [P] [US9] Tests in `src/hooks/useUrlPair.test.ts`:
   - It parses a valid `?from=GBP&to=JPY`
   - An unknown code, `from===to`, or missing params give the default USD→EUR
   - A pair change calls `history.replaceState` (not `pushState`) with `?from=…&to=…`
-- [ ] T073 [P] [US9] Tests in `src/hooks/useTheme.test.ts`: the default is `dark`, toggling sets `document.documentElement.dataset.theme` and persists to `fx:v1:theme`, and it's restored on load
+- [X] T073 [P] [US9] Tests in `src/hooks/useTheme.test.ts`: the default is `dark`, toggling sets `document.documentElement.dataset.theme` and persists to `fx:v1:theme`, and it's restored on load
 
 ### Implementation for User Story 9
 
-- [ ] T074 [P] [US9] Create `src/hooks/useUrlPair.ts` per `contracts/ui-contract.md` § URL, and use it in `src/App.tsx` for the initial `pair` (after currencies load) and for syncing changes (FR-046)
-- [ ] T075 [P] [US9] Create `src/hooks/useTheme.ts` on top of `usePersistentState('theme','dark', isTheme)`, setting `data-theme` on `<html>` (FR-047)
-- [ ] T076 [US9] Add the light theme tokens to `src/styles/tokens.css` under `:root[data-theme="light"]`. Invert the neutral scale for bg, surface, and text, keep lime as the accent with darkened text-on-lime, and use darker up/down variants that meet 4.5:1 on white. Check that each token pair has AA contrast. Build it per spec Assumption "UI not in the design".
-- [ ] T077 [US9] Add the theme toggle button to `src/components/Header/Header.tsx` (`aria-pressed`, label "Light theme", sun/moon inline SVG with `aria-hidden`, per spec Assumption "UI not in the design")
+- [X] T074 [P] [US9] Create `src/hooks/useUrlPair.ts` per `contracts/ui-contract.md` § URL, and use it in `src/App.tsx` for the initial `pair` (after currencies load) and for syncing changes (FR-046)
+- [X] T075 [P] [US9] Create `src/hooks/useTheme.ts` on top of `usePersistentState('theme','dark', isTheme)`, setting `data-theme` on `<html>` (FR-047)
+- [X] T076 [US9] Add the light theme tokens to `src/styles/tokens.css` under `:root[data-theme="light"]`. Invert the neutral scale for bg, surface, and text, keep lime as the accent with darkened text-on-lime, and use darker up/down variants that meet 4.5:1 on white. Check that each token pair has AA contrast. Build it per spec Assumption "UI not in the design".
+- [X] T077 [US9] Add the theme toggle button to `src/components/Header/Header.tsx` (`aria-pressed`, label "Light theme", sun/moon inline SVG with `aria-hidden`, per spec Assumption "UI not in the design")
 
 **Checkpoint**: The theme and share-link enhancements work.
 

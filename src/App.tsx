@@ -15,10 +15,34 @@ import { DEFAULT_AMOUNT, DEFAULT_PAIR } from './data/currencyCatalog'
 import { useConversionLog } from './hooks/useConversionLog'
 import { useFavorites } from './hooks/useFavorites'
 import { usePersistentState } from './hooks/usePersistentState'
+import { useTheme } from './hooks/useTheme'
+import { pairFromUrl, useUrlPairSync } from './hooks/useUrlPair'
 import { useRates } from './hooks/useRates'
 import type { CurrencyPair, HistoryRange, TabId } from './types'
 import { formatAmount, formatInputDisplay, parseAmountInput } from './utils/format'
 import { swapPair, withFrom, withTo } from './utils/pair'
+
+/** Sun / moon glyph in the icon set's 1.5px stroke style (spec Assumption "UI not in the design"). */
+function ThemeIcon({ light }: { light: boolean }) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
+      {light ? (
+        <path
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M17 11.5A7 7 0 1 1 8.5 3a5.5 5.5 0 0 0 8.5 8.5Z"
+        />
+      ) : (
+        <g stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+          <circle cx="10" cy="10" r="3.5" />
+          <path d="M10 1.5v2M10 16.5v2M1.5 10h2M16.5 10h2M4 4l1.4 1.4M14.6 14.6 16 16M4 16l1.4-1.4M14.6 5.4 16 4" />
+        </g>
+      )}
+    </svg>
+  )
+}
 
 const TAB_IDS: TabId[] = ['history', 'compare', 'favorites', 'log']
 
@@ -37,7 +61,15 @@ function FxChecker() {
   const favorites = useFavorites()
   const log = useConversionLog()
   const [amountText, setAmountText] = useState(String(DEFAULT_AMOUNT))
-  const [pair, setPair] = useState<CurrencyPair>(DEFAULT_PAIR)
+  const theme = useTheme()
+  // null = not chosen yet: use the pair from the URL (once currencies are known) or the default.
+  const [chosenPair, setChosenPair] = useState<CurrencyPair | null>(null)
+  const ready = rates.status === 'ready'
+  const pair =
+    chosenPair ?? (ready ? pairFromUrl(window.location.search, rates.currencies.map((c) => c.code)) : null) ?? DEFAULT_PAIR
+  const setPair = (next: CurrencyPair | ((p: CurrencyPair) => CurrencyPair)) =>
+    setChosenPair(typeof next === 'function' ? next(pair) : next)
+  useUrlPairSync(pair, ready)
   const [activeTab, setActiveTab] = usePersistentState<TabId>('activeTab', 'history', (v) =>
     TAB_IDS.includes(v as TabId) ? (v as TabId) : null,
   )
@@ -89,8 +121,22 @@ function FxChecker() {
 
   return (
     <>
-      <Header currencyCount={rates.status === 'ready' ? rates.currencies.length : null} />
-      {rates.status === 'ready' && <LiveTicker rate={rates.rate} change={rates.change} />}
+      <Header
+        currencyCount={ready ? rates.currencies.length : null}
+        actions={
+          <button
+            type="button"
+            className={styles.iconButton}
+            aria-pressed={theme.theme === 'light'}
+            aria-label="Light theme"
+            title="Light theme"
+            onClick={theme.toggle}
+          >
+            <ThemeIcon light={theme.theme === 'light'} />
+          </button>
+        }
+      />
+      {ready && <LiveTicker rate={rates.rate} change={rates.change} />}
       <main className={styles.content}>
         <h1 className="visually-hidden">FX Checker currency converter</h1>
         {rates.snapshot?.stale && <StaleBanner date={rates.snapshot.date} />}
