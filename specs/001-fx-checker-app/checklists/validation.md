@@ -9,7 +9,7 @@
 |------|--------|
 | `npm run lint` | ✅ 0 errors, 0 warnings |
 | `npm test` | ✅ 121/121 passed |
-| `npm run build` | ✅ JS 84.8 KB gzipped (budget 100 KB), CSS 5.6 KB gzipped |
+| `npm run build` | ✅ JS 85.1 KB gzipped (budget 100 KB), CSS 5.6 KB gzipped |
 
 ## Performance (T088: SC-001, SC-002)
 
