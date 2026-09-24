@@ -9,6 +9,7 @@ This is my solution to the [FX Checker challenge on Frontend Mentor](https://www
 ![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
 ![Vitest](https://img.shields.io/badge/tests-121%20passing-6E9F18?logo=vitest&logoColor=white)
 ![Lighthouse accessibility](https://img.shields.io/badge/Lighthouse%20a11y-100-brightgreen?logo=lighthouse&logoColor=white)
+![License: MIT](https://img.shields.io/badge/license-MIT-blue)
 ![Deployed on Vercel](https://img.shields.io/badge/deployed-Vercel-000000?logo=vercel&logoColor=white)
 
 ## Table of contents
@@ -220,7 +221,7 @@ What worked well was keeping the spec as the single source of truth, so every ch
 
 ## License
 
-No license has been chosen for this repository yet. The challenge design and assets belong to [Frontend Mentor](https://www.frontendmentor.io).
+The code is distributed under the MIT License. See [LICENSE](./LICENSE) for details. The challenge design and assets belong to [Frontend Mentor](https://www.frontendmentor.io).
 
 ## Author
 
