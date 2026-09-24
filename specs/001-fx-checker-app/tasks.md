@@ -521,8 +521,8 @@ spec draft and plan)
 - [X] T090 [P] Add plain-language comments to the key logic: cross-rate math, history stats, the undo timer, cache fallback, shortcut guards (`src/utils/rates.ts`, `src/hooks/useConversionLog.ts`, `src/hooks/useRates.ts`, `src/hooks/useShortcuts.ts`)
 - [X] T091 Update `CLAUDE.md` with the real commands and a short note on the final architecture, replacing the "planned" wording
 - [X] T092 Ask the user to confirm the project is done, then deploy to Vercel under the user's account (production), and record the live URL — **Live: https://fsdev-foreign-exchange-checker.vercel.app** (Vercel project `gustavo-sanchezs-projects/fsdev-foreign-exchange-checker`, Git-connected to `main`)
-- [ ] T093 Take the screenshots at exactly 375px and 1440px viewports into `screenshots/` (e.g., `screenshots/mobile-375.png`, `screenshots/desktop-1440.png`)
-- [ ] T094 Write `README.md` from `README-template.md` using the `create-readme` skill:
+- [X] T093 Take the screenshots at exactly 375px and 1440px viewports into `screenshots/` (e.g., `screenshots/mobile-375.png`, `screenshots/desktop-1440.png`)
+- [X] T094 Write `README.md` from `README-template.md` using the `create-readme` skill:
   - The author section has an inline row of badges linking to LinkedIn, GitHub, Hashnode, X, Bluesky, freeCodeCamp, and Frontend Mentor (URLs in `my-sdd-docs/spec-draft.md`)
   - Embed the screenshots, with the 375px image at 40% of the 1440px width
   - Include the live URL

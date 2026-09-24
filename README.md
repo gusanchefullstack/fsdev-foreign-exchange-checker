@@ -1,188 +1,241 @@
-# Frontend Mentor - FX Checker
+# Frontend Mentor - FX Checker solution
+
+A currency converter built with live central-bank reference rates. It includes a searchable currency picker, a scrolling live-markets ticker, a rate-history chart, a multi-currency comparison, pinned favorite pairs and a conversion log. Everything you save stays in your browser.
+
+This is my solution to the [FX Checker challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/foreign-exchange-currency-converter).
+
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
+![Vitest](https://img.shields.io/badge/tests-121%20passing-6E9F18?logo=vitest&logoColor=white)
+![Lighthouse accessibility](https://img.shields.io/badge/Lighthouse%20a11y-100-brightgreen?logo=lighthouse&logoColor=white)
+![Deployed on Vercel](https://img.shields.io/badge/deployed-Vercel-000000?logo=vercel&logoColor=white)
+
+## Table of contents
+
+- [Overview](#overview)
+  - [The challenge](#the-challenge)
+  - [Screenshots](#screenshots)
+  - [Links](#links)
+- [Getting started](#getting-started)
+- [Usage](#usage)
+- [Project structure](#project-structure)
+- [Tests](#tests)
+- [My process](#my-process)
+  - [Built with](#built-with)
+  - [What I learned](#what-i-learned)
+  - [Continued development](#continued-development)
+  - [Useful resources](#useful-resources)
+  - [AI Collaboration](#ai-collaboration)
+- [Roadmap](#roadmap)
+- [License](#license)
+- [Author](#author)
+- [Acknowledgments](#acknowledgments)
+
+## Overview
+
+### The challenge
+
+Users should be able to:
+
+- **Converter**:
+  - Type an amount and see it convert as they type.
+  - Pick the send and receive currencies from a searchable picker, and see the rate (`1 USD = 0.8530 EUR`).
+  - Swap the two currencies.
+  - Favorite the pair, or log the conversion.
+- **Currency picker**: search by code or name, see currencies grouped into "Popular" and "Other currencies", with a check on the selected one.
+- **Live markets ticker**: see scrolling currency pairs with their rate and 24-hour change.
+- **Rate history**:
+  - See a line and area chart for the active pair.
+  - Switch the range: 1D, 1W, 1M, 3M, 1Y or 5Y.
+  - See Open, Last, Change and % change for the range.
+- **Compare**: see the send amount converted into eight currencies at once, and pin any row.
+- **Favorites**: see pinned pairs with their live rate and daily change, load one into the converter, or unpin it.
+- **Conversion log**: see relative time, pair and amounts for each conversion; delete one entry, or clear the whole log.
+- **UI and accessibility**: responsive layouts, visible hover and focus states, and a fully keyboard-operable interface.
+
+I also built the challenge's optional ideas:
+- A light theme.
+- The active pair saved in the URL, so it can be shared.
+- Keyboard shortcuts.
+- CSV export of the log.
+- A hover crosshair on the chart.
+- An offline fallback to cached rates, with an out-of-date banner.
+
+### Screenshots
+
+<p align="left">
+  <img src="./screenshots/desktop-1440.png" alt="FX Checker on desktop (1440px): converter, live markets ticker and one-month USD/EUR rate history" width="100%" />
+</p>
+<p align="left">
+  <img src="./screenshots/mobile-375.png" alt="FX Checker on mobile (375px): stacked converter, tab dropdown and rate history" width="40%" />
+</p>
+
+### Links
+
+- Solution URL: _Frontend Mentor solution link coming after submission_
+- Live Site URL: [fsdev-foreign-exchange-checker.vercel.app](https://fsdev-foreign-exchange-checker.vercel.app)
+- Repository: [github.com/gusanchefullstack/fsdev-foreign-exchange-checker](https://github.com/gusanchefullstack/fsdev-foreign-exchange-checker)
+
+## Getting started
+
+**Prerequisites:** Node.js ≥ 20 (developed on Node 26) and npm.
+
+```bash
+git clone https://github.com/gusanchefullstack/fsdev-foreign-exchange-checker.git
+cd fsdev-foreign-exchange-checker
+npm install
+npm run dev        # http://localhost:5173
+```
+
+You don't need an API key or environment variables. Rates come from the public [Frankfurter API](https://frankfurter.dev/).
+
+## Usage
+
+| Command | What it does |
+|---------|--------------|
+| `npm run dev` | Starts the Vite dev server with hot reload |
+| `npm run build` | Type-checks (`tsc -b`) and builds to `dist/` |
+| `npm run preview` | Serves the production build locally |
+| `npm run lint` | ESLint with the TypeScript, React Hooks and jsx-a11y rules |
+| `npm test` | Runs the Vitest suite once |
+
+**Keyboard shortcuts** (they don't fire while you're typing in a field):
+
+| Key | Action |
+|-----|--------|
+| `/` | Open the Send currency search |
+| `s` | Swap currencies |
+| `1`–`6` | Chart range 1D, 1W, 1M, 3M, 1Y, 5Y |
+| `?` | Show or hide the shortcuts list |
+
+**Share a pair:** the URL always reflects the active pair, for example [`?from=GBP&to=JPY`](https://fsdev-foreign-exchange-checker.vercel.app/?from=GBP&to=JPY).
 
-![Design preview for the FX Checker coding challenge](./preview.jpg)
+## Project structure
 
-## Welcome! 👋
+```text
+index.html               # Vite entry (loads /src/main.tsx)
+public/assets/           # Flags, icons, logo and JetBrains Mono variable font
+src/
+├── App.tsx              # Top-level state: active pair, amount, tab, range; wires hooks to components
+├── components/          # One folder per component: Component.tsx + .module.css + .test.tsx
+├── data/                # Currency catalog (code → flag, design name), Popular/ticker/compare sets
+├── hooks/               # useRates, useHistory, useFavorites, useConversionLog, useTheme, …
+├── services/            # frankfurter.ts, the only module that calls fetch
+├── styles/              # tokens.css (Figma variables + light theme), fonts.css, global.css
+├── types/               # Domain types
+└── utils/               # Rate math, formatting, relative time, CSV
+specs/001-fx-checker-app/ # Spec, plan, research, data model, contracts, tasks, validation record
+tests/                   # Vitest setup, fetch mocks and API fixtures
+```
 
-Thanks for purchasing this premium Frontend Mentor coding challenge.
+## Tests
 
-[Frontend Mentor](https://www.frontendmentor.io) challenges help you improve your coding skills by building realistic projects. These premium challenges are perfect portfolio pieces, so please feel free to use what you create in your portfolio to show others.
+The tests use [Vitest](https://vitest.dev/) with Testing Library, jsdom and [vitest-axe](https://github.com/chaance/vitest-axe) for automated accessibility checks.
 
-**To do this challenge, you need a good understanding of HTML, CSS, and JavaScript, plus some experience working with a REST API.**
+```bash
+npm test                                   # all 121 tests
+npx vitest run src/utils/format.test.ts    # a single file
+npx vitest run -t "swaps currencies"       # a single test by name
+```
 
-## The challenge
+The tests cover:
+- Rate math and number formatting.
+- The API service's error mapping.
+- Storage that's corrupt, missing or blocked.
+- Every user story's acceptance scenarios.
+- Keyboard behavior: tab order, arrow keys, and where focus lands after removing items.
+- An axe run on every tab.
 
-Your challenge is to build out this FX Checker currency app and get it looking as close to the design as possible.
+## My process
 
-The app converts between currencies using live exchange rates, with a rate-history chart, a multi-currency comparison, pinned favorite pairs, and a running log of conversions. You can use any tools you like, so if there's something you've been wanting to practice, give it a go.
+This project was built with **spec-driven development** using [GitHub Spec Kit](https://github.com/github/spec-kit). The steps were: constitution → specification → clarification → plan → tasks → consistency analysis → implementation. The artifacts are in [`specs/001-fx-checker-app/`](./specs/001-fx-checker-app/).
 
-Your users should be able to:
+### Built with
 
-### Converter
+- Semantic HTML5 and WAI-ARIA patterns (tabs, combobox with a listbox, radio group, live region)
+- CSS Modules, CSS custom properties (design tokens), Flexbox, CSS Grid, and container queries
+- Mobile-first, responsive from 320px up
+- [React 19](https://react.dev/) + [TypeScript 6](https://www.typescriptlang.org/) (strict)
+- [Vite 8](https://vite.dev/)
+- [Frankfurter API](https://frankfurter.dev/) for exchange rates
+- A hand-drawn SVG chart (no chart library)
+- [Vitest](https://vitest.dev/), [Testing Library](https://testing-library.com/) and vitest-axe
+- [Vercel](https://vercel.com/) for hosting
 
-- Enter an amount to send and see it convert in real time as they type
-- Pick the "send" and "receive" currencies from a searchable currency picker
-- See the live exchange rate for the active pair (for example, `1 USD = 0.8530 EUR`)
-- Swap the send and receive currencies with the swap button
-- Favorite the active pair, and log a conversion to their history
+### What I learned
 
-### Currency picker
+**1. Check the API before trusting the docs.** The challenge README lists `/v2/latest` and `/v2/{start}..{end}`, but both now return 404. The live v2 API uses `/v2/rates?base=&quotes=&from=&group=`. I also found the default feed blends several central banks (166 currencies), while the ECB-only feed has just 30. So the app shows the currencies that have a bundled flag.
 
-- Search the full list of available currencies by code or name
-- See currencies grouped into "Popular" and "Other currencies", each row showing the flag, code, and name
-- See a check against the currency that's currently selected
+**2. One request, then cross rates.** Instead of one request per pair, the app fetches USD-based rates for the last 10 days once. Every pair is then derived through USD, and the last two dates give the daily change:
 
-### Live markets ticker
+```ts
+// A → B = (USD → B) / (USD → A)
+export function crossRate(usdRates: Record<string, number>, from: string, to: string) {
+  const a = from === 'USD' ? 1 : usdRates[from]
+  const b = to === 'USD' ? 1 : usdRates[to]
+  return a && b ? b / a : null
+}
+```
 
-- See a ticker of currency pairs, each with its current rate and 24-hour change (up or down)
+**3. Accessible custom widgets.** For the currency picker, focus stays in the search field. The arrow keys move `aria-activedescendant` across a grouped `role="listbox"`, and Escape returns focus to the button that opened it. Lighthouse and axe checks caught subtler issues:
+- A tab badge made the accessible name differ from the visible label.
+- `<output>` is an implicit live region, so it announced every keystroke.
+- Keyboard focus fell back to `<body>` after "Clear all" or deleting a row.
 
-### Rate history
+**4. A responsive SVG chart without a library.** The paths use a fixed `viewBox` with `preserveAspectRatio="none"` and `vector-effect: non-scaling-stroke`. The axis labels are HTML. So the chart stretches to any width, the lines stay crisp, and the text doesn't distort.
 
-- View a line and area chart of the active pair's rate over time
-- Switch the chart range between 1D, 1W, 1M, 3M, 1Y, and 5Y
-- See the open, last, absolute change, and percentage change for the selected range
+**5. Storage the app can survive without.** Every `localStorage` read is validated and falls back to defaults. That covers corrupt data, private mode and quota errors, and bad entries are dropped one at a time.
 
-### Compare
+### Continued development
 
-- See their send amount converted into a range of other currencies at once, each with its reference rate
-- Pin or unpin any comparison row to their favorites
+- Test with a real screen reader (VoiceOver/NVDA) as a routine step, not only automated audits.
+- The single-key shortcuts should get an off/remap option to fully meet WCAG 2.1.4.
+- Look into a service worker, so the offline fallback also covers loading the app itself.
 
-### Favorites
+### Useful resources
 
-- See their pinned pairs, each with its live rate and 24-hour change
-- Load a pinned pair back into the converter by selecting its row
-- Unpin a pair they no longer want to track
+- [WAI-ARIA Authoring Practices: Combobox](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) and [Tabs](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/): the keyboard models used for the picker and tabs.
+- [Frankfurter API docs](https://frankfurter.dev/): the current v2 endpoints and the provider options.
+- [MDN: CSS container queries](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_queries): how the big amounts scale down on small phones.
+- [GitHub Spec Kit](https://github.com/github/spec-kit): the spec-driven workflow behind this project.
 
-### Conversion log
+### AI Collaboration
 
-- See a log of conversions they've made, each showing the relative time, the pair, and the send and receive amounts
-- Clear the whole log
-- Delete an individual entry
+I used **Claude Code** throughout, following the Spec Kit workflow:
 
-### UI & accessibility
+- **Specification:** it turned my drafts into a constitution and a spec, asked clarifying questions (such as what "1D" means with end-of-day data), and caught contradictions before any code existed. Examples are the outdated API endpoints and the currency-count mismatch between the API and the design.
+- **Design:** it read the Figma file through the Figma MCP server for design tokens, layouts and exact copy.
+- **Implementation:** test-first, story by story, with lint, type-check and test runs after each one.
+- **Verification:** it used Chrome DevTools for Lighthouse audits, checks at 320, 375, 768 and 1440px, and performance measurements.
 
-- View the optimal layout for the interface depending on their device's screen size
-- See hover and focus states for all interactive elements on the page
-- Navigate the entire app using only their keyboard
+What worked well was keeping the spec as the single source of truth, so every change traced back to a requirement. What still needs a human: a real screen-reader pass, and judgment calls where the design was inconsistent (for example, number formatting).
 
-### Data
+## Roadmap
 
-There's no data file for this challenge. The exchange rates come from a live API, and the user's own data (favorites and conversion log) is saved in the browser.
+- [x] Converter, picker, ticker, history, compare, favorites and conversion log
+- [x] Light theme, shareable URL, keyboard shortcuts, CSV export, chart crosshair, offline fallback
+- [ ] Option to turn off or remap single-key shortcuts (WCAG 2.1.4)
+- [ ] Manual screen-reader audit
 
-We recommend the [Frankfurter API](https://frankfurter.dev/) for the rates. It's free, needs no API key, has no rate limits, is CORS-enabled, and is backed by the European Central Bank. A few endpoints cover everything in the design:
+## License
 
-- `GET /v2/currencies` to populate the currency picker
-- `GET /v2/latest?base=USD` for the converter, ticker, and comparison rates
-- `GET /v2/latest?base=USD&symbols=EUR` for a lighter single-pair lookup
-- `GET /v2/{start}..{end}?base=USD&symbols=EUR` for the rate-history time series
+No license has been chosen for this repository yet. The challenge design and assets belong to [Frontend Mentor](https://www.frontendmentor.io).
 
-You're free to use a different exchange-rate API if you prefer. Just note that the history chart needs time-series data, so check your chosen API supports it.
+## Author
 
-### Saving favorites and the conversion log
+**Gustavo Sanchez Galarza**
 
-A user's pinned pairs and their conversion log should persist across browser sessions. When they pin a pair or log a conversion, that change should still be there when they close and reopen the app. `localStorage` is a natural fit, since this app doesn't need user accounts. It's also a nice touch to remember the last tab they had open.
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/gustavosanchezgalarza/)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?logo=github&logoColor=white)](https://github.com/gusanchefullstack)
+[![Hashnode](https://img.shields.io/badge/Hashnode-2962FF?logo=hashnode&logoColor=white)](https://hashnode.com/@gusanchedev)
+[![X](https://img.shields.io/badge/X-000000?logo=x&logoColor=white)](https://x.com/gusanchedev)
+[![Bluesky](https://img.shields.io/badge/Bluesky-0285FF?logo=bluesky&logoColor=white)](https://bsky.app/profile/gusanchedev.bsky.social)
+[![freeCodeCamp](https://img.shields.io/badge/freeCodeCamp-0A0A23?logo=freecodecamp&logoColor=white)](https://www.freecodecamp.org/gusanchedev)
+[![Frontend Mentor](https://img.shields.io/badge/Frontend%20Mentor-3F54A3?logo=frontendmentor&logoColor=white)](https://www.frontendmentor.io/profile/gusanchefullstack)
 
-### States to handle
+## Acknowledgments
 
-- **Empty favorites:** when nothing is pinned yet, show the prompt to pin a pair rather than an empty list
-- **Empty log:** when no conversions have been logged, show the prompt explaining that conversions are recorded automatically
-- **Empty comparison:** when the send amount is empty, prompt the user to enter an amount
-- **Chart error:** if the rate history can't load, show a friendly message rather than a broken chart
-
-### Accessibility
-
-- Make sure keyboard navigation works for all interactive elements, including the currency pickers, the swap button, the tabs, the chart range controls, and the favorite and pin toggles
-- Provide visible focus styles. Dark interfaces hide weak focus rings, so these matter more than usual here
-- Use appropriate semantic HTML for the tabs, the lists of currencies and conversions, and the currency picker popover
-- Announce dynamic changes to screen readers, such as the converted amount updating, a pair being pinned, or a conversion being logged
-
-### Ideas to test yourself
-
-- Add a light theme so users can switch between the dark-first design and a light alternative
-- Persist the active currency pair in the URL so a conversion can be bookmarked or shared
-- Add keyboard shortcuts so power users can focus the search, swap currencies, and switch the chart range without the mouse
-- Export the conversion log as a CSV file
-- Add a hover crosshair to the rate chart that shows the exact date and rate under the cursor
-- Cache the last successful rates and fall back to them with an out-of-date banner when the API is unreachable
-- Build as a full-stack app with accounts so a user's favorites and conversion log sync across devices
-
-### Want some support on the challenge?
-
-[Join our community](https://www.frontendmentor.io/community) and ask questions in the **#help** channel.
-
-## Where to find everything
-
-Your task is to build out the project to the Figma design file provided. You can download the design file on the platform. **Please be sure not to share it with anyone else.** The design download comes with a `README.md` file to help you get set up. There are a couple of `.gitignore` files in this starter to keep the design files out of your repo, so please leave them in place.
-
-All the required assets for this project are in the `/assets` folder. The icons and flags are already exported and optimized, and the logo is provided as an SVG. We also include the variable font file for JetBrains Mono. You can either link to Google Fonts or use the local font file to host the font yourself.
-
-The design system in the design file has all the details on the colors, fonts, spacing, and styles used in this project. Our fonts always come from [Google Fonts](https://fonts.google.com/).
-
-The starter `index.html` already contains the static written content from the design, with comments marking where the dynamic, data-driven content goes. Building the HTML structure around it is part of the challenge.
-
-## Using AI coding assistants
-
-We've included two files to help you if you're using AI coding assistants (like Claude, GitHub Copilot, Cursor, etc.) while working on this challenge:
-
-- `AGENTS.md` - Contains detailed instructions for AI assistants on how to help you with this challenge. It's tailored to this challenge's difficulty level, so the AI will provide guidance appropriate to your learning stage—offering more support for beginner challenges and encouraging more independence on advanced ones.
-- `CLAUDE.md` - A pointer file that directs Claude-based tools to the AGENTS.md instructions.
-
-**How to use them:** You don't need to do anything! These files are automatically detected by most AI coding tools. The AI will read them and adjust its behavior to be a better learning partner—guiding you toward solutions rather than just giving you the answers.
-
-**Note:** These files are designed to help you *learn*, not to do the work for you. The AI is instructed to ask questions, give hints, and explain concepts rather than writing complete solutions.
-
-## Building your project
-
-Feel free to use any workflow that you feel comfortable with. Below is a suggested process, but do not feel like you need to follow these steps:
-
-1. Separate the `starter-code` from the rest of this project and rename it to something meaningful for you. Initialize the codebase as a public repository on [GitHub](https://github.com/). Creating a repo will make it easier to share your code with the community if you need help. If you're not sure how to do this, [have a read-through of this Try Git resource](https://try.github.io/). **⚠️ IMPORTANT ⚠️: There are already a couple of `.gitignore` files in this project. Please do not remove them or change the content of the files. If you create a brand new project, please use the `.gitignore` files provided in your new codebase. This is to avoid the accidental upload of the design files to GitHub. With these premium challenges, please be sure not to share the design files in your GitHub repo. Thanks!**
-2. Configure your repository to publish your code to a web address. This will also be useful if you need some help during a challenge as you can share the URL for your project with your repo URL. There are a number of ways to do this, and we provide some recommendations below.
-3. Look through the designs to start planning out how you'll tackle the project. This step is crucial to help you think ahead for CSS classes to create reusable styles.
-4. Before adding any styles, structure your content with HTML. Writing your HTML first can help focus your attention on creating well-structured content.
-5. Write out the base styles for your project, including general content styles, such as `font-family` and `font-size`.
-6. Start adding styles to the top of the page and work down. Only move on to the next section once you're happy you've completed the area you're working on.
-
-## Deploying your project
-
-As mentioned above, there are many ways to host your project for free. Our recommended hosts are:
-
-- [GitHub Pages](https://pages.github.com/)
-- [Vercel](https://vercel.com/)
-- [Netlify](https://www.netlify.com/)
-
-You can host your site using one of these solutions or any of our other trusted providers. [Read more about our recommended and trusted hosts](https://www.frontendmentor.io/guides/hosting-your-solution).
-
-## Create a custom `README.md`
-
-We strongly recommend overwriting this `README.md` with a custom one. We've provided a template inside the [`README-template.md`](./README-template.md) file in this starter code.
-
-The template provides a guide for what to add. A custom `README` will help you explain your project and reflect on your learnings. Please feel free to edit our template as much as you like.
-
-Once you've added your information to the template, delete this file and rename the `README-template.md` file to `README.md`. That will make it show up as your repository's README file.
-
-## Submitting your solution
-
-Submit your solution on the platform for the rest of the community to see. Follow our ["Complete guide to submitting solutions"](https://www.frontendmentor.io/guides/how-to-submit-solutions) for tips on how to do this.
-
-Remember, if you're looking for feedback on your solution, be sure to ask questions when submitting it. The more specific and detailed you are with your questions, the higher the chance you'll get valuable feedback from the community.
-
-**⚠️ IMPORTANT ⚠️: With these premium challenges, please be sure not to upload the design files to GitHub when you're submitting to the platform and sharing it around. If you've created a brand new project, the easiest way to do that is to copy across the `.gitignore` provided in this starter project.**
-
-## Sharing your solution
-
-There are multiple places you can share your solution:
-
-1. Share your solution page in the **#finished-projects** channel of our [community](https://www.frontendmentor.io/community).
-2. Share on [X (formerly Twitter)](https://x.com/frontendmentor) and mention **@frontendmentor**, including the repo and live URLs in your post. We'd love to take a look at what you've built and help share it around.
-3. Share your solution on [LinkedIn](https://www.linkedin.com/company/frontend-mentor/).
-4. Blog about your experience building your project. Writing about your workflow, technical choices, and talking through your code is a brilliant way to reinforce what you've learned. Great platforms to write on are [dev.to](https://dev.to/), [Hashnode](https://hashnode.com/), and [CodeNewbie](https://community.codenewbie.org/).
-
-We provide templates to help you share your solution once you've submitted it on the platform. Please do edit them and include specific questions when you're looking for feedback.
-
-The more specific you are with your questions the more likely it is that another member of the community will give you feedback.
-
-## Got feedback for us?
-
-We love receiving feedback! We're always looking to improve our challenges and our platform. So if you have anything you'd like to mention, please email hi[at]frontendmentor[dot]io.
-
-**Have fun building!** 🚀
+- [Frontend Mentor](https://www.frontendmentor.io) for the challenge, design and assets.
+- [Frankfurter](https://frankfurter.dev/) for a free, key-less exchange-rate API.
+- [JetBrains Mono](https://www.jetbrains.com/lp/mono/), the typeface used throughout.
