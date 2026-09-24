@@ -1,0 +1,105 @@
+.chart {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-250);
+  padding: var(--space-250);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-16);
+  background: var(--color-surface);
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-100);
+}
+
+.pair {
+  font-size: var(--text-preset-3-size);
+  font-weight: var(--weight-medium);
+  line-height: var(--text-preset-3-line);
+  letter-spacing: var(--text-preset-3-tracking);
+}
+
+.info {
+  opacity: 0.7;
+  font-size: var(--text-preset-5-size);
+  line-height: var(--text-preset-5-line);
+  letter-spacing: var(--text-preset-5-tracking);
+  text-transform: uppercase;
+}
+
+.body {
+  display: flex;
+  gap: var(--space-200);
+}
+
+.yAxis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 272px;
+  color: var(--color-text-muted);
+  font-size: var(--text-preset-6-size);
+  line-height: 1;
+}
+
+.plot {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-200);
+  min-width: 0;
+}
+
+.svg {
+  width: 100%;
+  height: 272px;
+  overflow: visible;
+}
+
+.grid {
+  stroke: var(--color-border);
+  stroke-dasharray: 2 4;
+  stroke-width: 1;
+}
+
+.line {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+
+.xAxis {
+  display: flex;
+  justify-content: space-between;
+  color: var(--color-text-muted);
+  font-size: var(--text-preset-6-size);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  .chart {
+    padding: var(--space-200);
+  }
+
+  .body {
+    gap: var(--space-100);
+  }
+
+  .yAxis,
+  .svg {
+    height: 200px;
+  }
+
+  /* Only first, middle and last date fit on phones (Figma 237:1337). */
+  .xAxis span:nth-child(2),
+  .xAxis span:nth-child(4) {
+    display: none;
+  }
+}

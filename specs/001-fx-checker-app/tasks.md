@@ -287,12 +287,12 @@ V6–V7).
 
 ### Tests for User Story 4
 
-- [ ] T046 [P] [US4] Hook tests in `src/hooks/useHistory.test.ts`:
+- [X] T046 [P] [US4] Hook tests in `src/hooks/useHistory.test.ts`:
   - Each range requests the correct `from`/`group` (research R5)
   - The in-memory cache is used for a repeated pair and range
   - Fewer than 2 points gives the `error` state
   - A pair change refetches
-- [ ] T047 [P] [US4] Panel tests in `src/components/HistoryPanel/HistoryPanel.test.tsx`:
+- [X] T047 [P] [US4] Panel tests in `src/components/HistoryPanel/HistoryPanel.test.tsx`:
   - The default range is 1M, with `aria-checked` on it
   - Stats show Open, Last, signed Change, and % change with ▲/▼ and up/down classes
   - Arrow keys move through the range group
@@ -302,10 +302,10 @@ V6–V7).
 
 ### Implementation for User Story 4
 
-- [ ] T048 [US4] Create `src/hooks/useHistory.ts`. `useHistory(pair, range)` calls `fetchHistory`, caches results in a module-level `Map` keyed `${from}-${to}-${range}`, and returns `{status:'loading'|'ready'|'error', series}` with `historyStats` applied. `points.length < 2` → `error` (FR-019–FR-023)
-- [ ] T049 [P] [US4] Create `src/components/HistoryPanel/StatCards.tsx` and `StatCards.module.css`: four cards (Open, Last, Change, % change) as a `<dl>`, with values colored `--color-up` or `--color-down` by sign (Figma 75:175 stat row)
-- [ ] T050 [P] [US4] Create `src/components/HistoryPanel/RangeSelector.tsx` and `RangeSelector.module.css`: a `role="radiogroup"` labeled "Chart range" with six `role="radio"` buttons (visible labels 1D 1W 1M 3M 1Y 5Y, written in normal case in the markup as "1d" etc. and uppercased with CSS), a roving tabindex, and ←/→ selecting (FR-020)
-- [ ] T051 [US4] Create `src/components/HistoryPanel/RateChart.tsx` and `RateChart.module.css`: a responsive hand-drawn SVG (research R7) with:
+- [X] T048 [US4] Create `src/hooks/useHistory.ts`. `useHistory(pair, range)` calls `fetchHistory`, caches results in a module-level `Map` keyed `${from}-${to}-${range}`, and returns `{status:'loading'|'ready'|'error', series}` with `historyStats` applied. `points.length < 2` → `error` (FR-019–FR-023)
+- [X] T049 [P] [US4] Create `src/components/HistoryPanel/StatCards.tsx` and `StatCards.module.css`: four cards (Open, Last, Change, % change) as a `<dl>`, with values colored `--color-up` or `--color-down` by sign (Figma 75:175 stat row)
+- [X] T050 [P] [US4] Create `src/components/HistoryPanel/RangeSelector.tsx` and `RangeSelector.module.css`: a `role="radiogroup"` labeled "Chart range" with six `role="radio"` buttons (visible labels 1D 1W 1M 3M 1Y 5Y, written in normal case in the markup as "1d" etc. and uppercased with CSS), a roving tabindex, and ←/→ selecting (FR-020)
+- [X] T051 [US4] Create `src/components/HistoryPanel/RateChart.tsx` and `RateChart.module.css`: a responsive hand-drawn SVG (research R7) with:
   - A lime line and a lime-to-transparent gradient area
   - Dashed gridlines with high, mid, and low Y labels at 4 dp
   - About 5 evenly spaced X date labels ("Apr 14")
@@ -313,8 +313,8 @@ V6–V7).
   - `role="img"` with `aria-label="USD to EUR rate over 1 month: from 0.8516 to 0.8530, up 0.16%"`
 
   Leave a prop hook for the US10 crosshair
-- [ ] T052 [US4] Create `src/components/HistoryPanel/HistoryPanel.tsx` and `HistoryPanel.module.css`. It composes StatCards, RangeSelector, and RateChart, shows a loading skeleton while loading, and on `error` shows `EmptyState` with the FR-023 copy using the pair name. Stats and range sit in a row on desktop and stack on mobile (Figma 237:1337). Range state lives in `App` so US10 shortcuts can change it
-- [ ] T053 [US4] In `src/App.tsx`, render `HistoryPanel` in the History tabpanel with the active `pair` and `range` (default `'1M'`)
+- [X] T052 [US4] Create `src/components/HistoryPanel/HistoryPanel.tsx` and `HistoryPanel.module.css`. It composes StatCards, RangeSelector, and RateChart, shows a loading skeleton while loading, and on `error` shows `EmptyState` with the FR-023 copy using the pair name. Stats and range sit in a row on desktop and stack on mobile (Figma 237:1337). Range state lives in `App` so US10 shortcuts can change it
+- [X] T053 [US4] In `src/App.tsx`, render `HistoryPanel` in the History tabpanel with the active `pair` and `range` (default `'1M'`)
 
 **Checkpoint**: US1–US4 work on their own.
 

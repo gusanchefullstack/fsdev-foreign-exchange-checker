@@ -1,0 +1,37 @@
+.history {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-250);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-200);
+}
+
+.loading,
+.error {
+  display: grid;
+  place-items: center;
+  min-height: 364px;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-16);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 1023px) {
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 767px) {
+  .loading,
+  .error {
+    min-height: 280px;
+  }
+}

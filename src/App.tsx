@@ -2,6 +2,7 @@ import { useState } from 'react'
 import styles from './App.module.css'
 import { Converter } from './components/Converter/Converter'
 import { FavoritesPanel } from './components/FavoritesPanel/FavoritesPanel'
+import { HistoryPanel } from './components/HistoryPanel/HistoryPanel'
 import { LogPanel } from './components/LogPanel/LogPanel'
 import { LiveAnnouncerProvider, useAnnounce } from './components/LiveAnnouncer/LiveAnnouncer'
 import { PinButton } from './components/PinButton/PinButton'
@@ -10,7 +11,7 @@ import { DEFAULT_AMOUNT, DEFAULT_PAIR } from './data/currencyCatalog'
 import { useConversionLog } from './hooks/useConversionLog'
 import { useFavorites } from './hooks/useFavorites'
 import { useRates } from './hooks/useRates'
-import type { CurrencyPair, TabId } from './types'
+import type { CurrencyPair, HistoryRange, TabId } from './types'
 import { formatAmount, formatInputDisplay, parseAmountInput } from './utils/format'
 import { swapPair, withFrom, withTo } from './utils/pair'
 
@@ -31,6 +32,7 @@ function FxChecker() {
   const [amountText, setAmountText] = useState(String(DEFAULT_AMOUNT))
   const [pair, setPair] = useState<CurrencyPair>(DEFAULT_PAIR)
   const [activeTab, setActiveTab] = useState<TabId>('history')
+  const [range, setRange] = useState<HistoryRange>('1M')
 
   const rate = rates.rate(pair.from, pair.to)
   const amount = parseAmountInput(amountText).value
@@ -121,6 +123,9 @@ function FxChecker() {
       </section>
       <section aria-label="Rate details">
         <Tabs tabs={tabs} active={activeTab} onChange={setActiveTab}>
+          {activeTab === 'history' && rates.status !== 'loading' && (
+            <HistoryPanel pair={pair} range={range} onRangeChange={setRange} />
+          )}
           {activeTab === 'favorites' && (
             <FavoritesPanel
               favorites={favorites.favorites}
