@@ -431,16 +431,16 @@ date. With no cache, friendly copy shows (quickstart V11).
 
 ### Tests for User Story 8
 
-- [ ] T068 [P] [US8] Tests in `src/hooks/useRates.test.ts`:
+- [X] T068 [P] [US8] Tests in `src/hooks/useRates.test.ts`:
   - On a network error with a valid `fx:v1:rates` cache, it returns `status:'ready'` with `snapshot.stale=true` and the cached date
   - With no cache it returns `error`
   - A successful fetch clears `stale`
-- [ ] T069 [P] [US8] Tests in `src/components/StaleBanner/StaleBanner.test.tsx`: it renders "Showing saved rates from {date}. Live rates are unavailable." with `role="status"`, and no raw error text anywhere
+- [X] T069 [P] [US8] Tests in `src/components/StaleBanner/StaleBanner.test.tsx`: it renders "Showing saved rates from {date}. Live rates are unavailable." with `role="status"`, and no raw error text anywhere
 
 ### Implementation for User Story 8
 
-- [ ] T070 [US8] Extend `src/hooks/useRates.ts`: on a failed fetch, read and validate `fx:v1:rates` (`contracts/storage.md`) and return it with `stale: true`. The currency list falls back to the catalog codes present in the cached snapshot (FR-051)
-- [ ] T071 [US8] Create `src/components/StaleBanner/StaleBanner.tsx` and `StaleBanner.module.css` (a notice bar using the surface and lime accent tokens, per spec Assumption "UI not in the design"). Render it at the top of `<main>` in `src/App.tsx` when `snapshot.stale`, and announce it once
+- [X] T070 [US8] Extend `src/hooks/useRates.ts`: on a failed fetch, read and validate `fx:v1:rates` (`contracts/storage.md`) and return it with `stale: true`. The currency list falls back to the catalog codes present in the cached snapshot (FR-051)
+- [X] T071 [US8] Create `src/components/StaleBanner/StaleBanner.tsx` and `StaleBanner.module.css` (a notice bar using the surface and lime accent tokens, per spec Assumption "UI not in the design"). Render it at the top of `<main>` in `src/App.tsx` when `snapshot.stale`, and announce it once
 
 **Checkpoint**: The app is resilient offline.
 

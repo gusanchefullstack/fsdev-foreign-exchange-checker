@@ -9,6 +9,7 @@ import { LiveTicker } from './components/LiveTicker/LiveTicker'
 import { LogPanel } from './components/LogPanel/LogPanel'
 import { LiveAnnouncerProvider, useAnnounce } from './components/LiveAnnouncer/LiveAnnouncer'
 import { PinButton } from './components/PinButton/PinButton'
+import { StaleBanner } from './components/StaleBanner/StaleBanner'
 import { Tabs, type TabItem } from './components/Tabs/Tabs'
 import { DEFAULT_AMOUNT, DEFAULT_PAIR } from './data/currencyCatalog'
 import { useConversionLog } from './hooks/useConversionLog'
@@ -92,6 +93,7 @@ function FxChecker() {
       {rates.status === 'ready' && <LiveTicker rate={rates.rate} change={rates.change} />}
       <main className={styles.content}>
         <h1 className="visually-hidden">FX Checker currency converter</h1>
+        {rates.snapshot?.stale && <StaleBanner date={rates.snapshot.date} />}
         <section className={styles.section} aria-labelledby="converter-title">
           <h2 id="converter-title" className={styles.sectionTitle}>
             Check the rate
