@@ -530,7 +530,7 @@ spec draft and plan)
   Then delete `README-template.md` as the starter instructs
 - [X] T095 After the user confirms, submit to Frontend Mentor with the `frontendmentor-submitter` agent (challenge `foreign-exchange-currency-converter`). Check that the snapshot the platform captures matches the design
 - [X] T096 Add the Frontend Mentor solution URL and Vercel live URL to `README.md`, and set the GitHub repo homepage with `gh repo edit --homepage <live-url>`
-- [ ] T097 Ask the user for confirmation, then update the portfolio with the `landing-page-portfolio-updater` agent
+- [X] T097 Ask the user for confirmation, then update the portfolio with the `landing-page-portfolio-updater` agent
 - [ ] T098 Ask the user for confirmation, then fix the Frontend Mentor quality-report issues with the `frontend-mentor-issue-fixer` agent
 
 ---
