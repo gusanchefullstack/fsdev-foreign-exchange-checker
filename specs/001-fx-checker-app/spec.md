@@ -401,7 +401,7 @@ spreadsheet, and hover over the chart to read the date and rate.
   Open/Last/Change/% change MUST compare the latest published rate with the previous one. Every
   other range charts and summarizes all rates within it.
 - **FR-021**: The system MUST show Open, Last, Change (signed), and % change (signed, with ▲/▼) for
-  the selected range, colored by direction.
+  the selected range, colored by direction. Open, Last and Change use the rate precision rule from FR-002.
 - **FR-022**: The chart MUST show the pair label, the latest rate with its publication date and the
   reference time "16:00 CET" (e.g., "0.8530 · May 14 16:00 CET"), high/mid/low value axis labels,
   and date labels on the time axis. The time is a fixed label because the source provides dates

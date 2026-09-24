@@ -1,14 +1,14 @@
 # Validation Record: FX Checker
 
 **Date**: 2026-09-24 | **Build**: production (`npm run build` + `vite preview`) and dev server
-**Tools**: Vitest suite (24 files, 118 tests), Chrome DevTools (Lighthouse, scripted checks), Figma desktop MCP
+**Tools**: Vitest suite (121 tests), Chrome DevTools (Lighthouse, scripted checks), Figma desktop MCP
 
 ## Quality gates (T085)
 
 | Gate | Result |
 |------|--------|
 | `npm run lint` | ✅ 0 errors, 0 warnings |
-| `npm test` | ✅ 118/118 passed |
+| `npm test` | ✅ 121/121 passed |
 | `npm run build` | ✅ JS 84.8 KB gzipped (budget 100 KB), CSS 5.6 KB gzipped |
 
 ## Performance (T088: SC-001, SC-002)
@@ -25,7 +25,7 @@
 | Lighthouse accessibility: desktop and mobile (navigation, History tab, dark) | ✅ 100 / 100 |
 | Lighthouse accessibility: snapshot, Favorites tab, light theme | ✅ 100 |
 | vitest-axe on every tab, the open picker and each panel | ✅ 0 violations |
-| Fixed during the audit | Tab badge accessible-name mismatch (label-content-name-mismatch); `<output>` implicit live region double-announcing each keystroke |
+| Fixed during the audit | Tab badge accessible-name mismatch (label-content-name-mismatch); `<output>` implicit live region double-announcing each keystroke; focus lost to `<body>` after Clear all / delete / unpin (now moves to Undo, the next row, or the empty state); mobile currency picker clipped 9px off-screen (now spans the panel, Figma 332:6918) |
 | Manual VoiceOver pass | ⚠️ Not performed in this session. Recommended before submission |
 
 ## Quickstart scenarios (T089)

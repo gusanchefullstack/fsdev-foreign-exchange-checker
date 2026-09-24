@@ -307,7 +307,7 @@ V6–V7).
 - [X] T050 [P] [US4] Create `src/components/HistoryPanel/RangeSelector.tsx` and `RangeSelector.module.css`: a `role="radiogroup"` labeled "Chart range" with six `role="radio"` buttons (visible labels 1D 1W 1M 3M 1Y 5Y, written in normal case in the markup as "1d" etc. and uppercased with CSS), a roving tabindex, and ←/→ selecting (FR-020)
 - [X] T051 [US4] Create `src/components/HistoryPanel/RateChart.tsx` and `RateChart.module.css`: a responsive hand-drawn SVG (research R7) with:
   - A lime line and a lime-to-transparent gradient area
-  - Dashed gridlines with high, mid, and low Y labels at 4 dp
+  - Dashed gridlines with high, mid, and low Y labels formatted with `formatRate` (FR-002)
   - About 5 evenly spaced X date labels ("Apr 14")
   - The header with the pair label "USD/EUR" and "{rate} · {Mon DD} 16:00 CET" (the date from the last point, "16:00 CET" as a fixed label per FR-022)
   - `role="img"` with `aria-label="USD to EUR rate over 1 month: from 0.8516 to 0.8530, up 0.16%"`
@@ -489,7 +489,7 @@ with the contract header and rows. Hovering the chart shows the date and rate (q
   - The header is exactly `datetime,from,to,send_amount,received_amount,rate`
   - Rows are newest first, amounts are 2 dp with no grouping, the rate is 6 dp, and lines end in `\r\n`
   - Values that need it are quoted
-- [X] T080 [P] [US10] Tests in `src/components/HistoryPanel/RateChart.test.tsx`: the pointer moving over the SVG shows a crosshair and a tooltip with the nearest point's date and 4 dp rate, and pointer leave hides it
+- [X] T080 [P] [US10] Tests in `src/components/HistoryPanel/RateChart.test.tsx`: the pointer moving over the SVG shows a crosshair and a tooltip with the nearest point's date and rate formatted with `formatRate` (FR-002), and pointer leave hides it
 
 ### Implementation for User Story 10
 

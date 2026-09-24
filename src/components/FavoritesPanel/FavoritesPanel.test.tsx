@@ -87,3 +87,28 @@ describe('Favorites in the app (US2)', () => {
     expect(screen.getByText('1 USD = 0.8764 EUR')).toBeInTheDocument()
   })
 })
+
+describe('Focus after unpinning (US2, keyboard)', () => {
+  it('moves focus to the next unpin button, then to the empty state', async () => {
+    const { useState } = await import('react')
+    const user = userEvent.setup()
+    function Harness() {
+      const [list, setList] = useState(favorites)
+      return (
+        <FavoritesPanel
+          favorites={list}
+          rate={rate}
+          change={change}
+          onSelect={() => {}}
+          onUnpin={(p) => setList((l) => l.filter((f) => f.from !== p.from))}
+        />
+      )
+    }
+    render(<Harness />)
+    screen.getByRole('button', { name: 'Unpin USD to EUR' }).focus()
+    await user.keyboard('{Enter}')
+    expect(screen.getByRole('button', { name: 'Unpin GBP to USD' })).toHaveFocus()
+    await user.keyboard('{Enter}')
+    expect(document.activeElement).toHaveTextContent('No pinned pairs yet')
+  })
+})

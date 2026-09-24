@@ -1,3 +1,5 @@
+import { useRef } from 'react'
+import { useFocusAfterRemoval } from '../../hooks/useFocusAfterRemoval'
 import type { CurrencyCode, CurrencyPair, Favorite } from '../../types'
 import { formatPct, formatRate } from '../../utils/format'
 import { EmptyState } from '../EmptyState/EmptyState'
@@ -19,19 +21,24 @@ interface FavoritesPanelProps {
 export function FavoritesPanel({ favorites, rate, change, onSelect, onUnpin }: FavoritesPanelProps) {
   // Pairs whose currency is no longer offered are hidden, not deleted.
   const visible = favorites.filter((f) => rate(f.from, f.to) !== null)
+  const listRef = useRef<HTMLUListElement>(null)
+  const emptyRef = useRef<HTMLDivElement>(null)
+  const markRemoved = useFocusAfterRemoval(listRef, '[aria-pressed]', emptyRef, visible.length)
 
   if (visible.length === 0) {
     return (
-      <EmptyState title="No pinned pairs yet">
-        Pin a pair to track its rate here. Tap the star icon on any conversion or comparison row.
-      </EmptyState>
+      <div ref={emptyRef} tabIndex={-1} className={styles.empty}>
+        <EmptyState title="No pinned pairs yet">
+          Pin a pair to track its rate here. Tap the star icon on any conversion or comparison row.
+        </EmptyState>
+      </div>
     )
   }
 
   return (
     <Panel title="Pinned pairs" meta={`${visible.length} ${visible.length === 1 ? 'favorite' : 'favorites'}`}>
-      <ul className={panelStyles.list}>
-        {visible.map((f) => {
+      <ul ref={listRef} className={panelStyles.list}>
+        {visible.map((f, index) => {
           const r = rate(f.from, f.to)!
           const pct = change(f.from, f.to) ?? 0
           return (
@@ -54,7 +61,10 @@ export function FavoritesPanel({ favorites, rate, change, onSelect, onUnpin }: F
                   </span>
                 </span>
               </button>
-              <PinButton pinned label={`Unpin ${f.from} to ${f.to}`} onClick={() => onUnpin({ from: f.from, to: f.to })} />
+              <PinButton pinned label={`Unpin ${f.from} to ${f.to}`} onClick={() => {
+                  markRemoved(index)
+                  onUnpin({ from: f.from, to: f.to })
+                }} />
             </li>
           )
         })}

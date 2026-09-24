@@ -155,3 +155,20 @@
   font-size: var(--text-preset-5-size);
   text-align: center;
 }
+
+/*
+ * Mobile: the popover spans the whole currency panel, just below it (Figma 332:6918).
+ * The panel (Converter) is the positioned ancestor, so the root must not be.
+ */
+@media (max-width: 767px) {
+  .root {
+    position: static;
+  }
+
+  .popover {
+    top: calc(100% + 4px);
+    right: 0;
+    left: 0;
+    width: auto;
+  }
+}

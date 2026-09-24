@@ -1,4 +1,5 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useFocusAfterRemoval } from '../../hooks/useFocusAfterRemoval'
 import type { ConversionLogEntry } from '../../types'
 import { formatAmount } from '../../utils/format'
 import { formatAbsolute, formatFull, formatRelativeTime } from '../../utils/relativeTime'
@@ -32,6 +33,23 @@ function useNow(intervalMs = 60_000) {
 /** Log tab (FR-033–FR-037), with the post-clear Undo bar (built per spec Assumption "UI not in the design"). */
 export function LogPanel({ entries, canUndo, onDelete, onClearAll, onUndo, onPauseUndo, extraActions }: LogPanelProps) {
   const now = useNow()
+  const listRef = useRef<HTMLOListElement>(null)
+  const emptyRef = useRef<HTMLDivElement>(null)
+  const clearRef = useRef<HTMLButtonElement>(null)
+  const undoRef = useRef<HTMLButtonElement>(null)
+  const markRemoved = useFocusAfterRemoval(listRef, '[data-delete]', emptyRef, entries.length)
+
+  // Keyboard focus follows the Undo flow: Clear all → Undo button; when the Undo bar
+  // goes away (undone or expired) and focus was lost, return it to the log.
+  const hadUndo = useRef(canUndo)
+  useEffect(() => {
+    if (canUndo && !hadUndo.current) undoRef.current?.focus()
+    if (!canUndo && hadUndo.current) {
+      const lost = !document.activeElement || document.activeElement === document.body
+      if (lost) (clearRef.current ?? emptyRef.current)?.focus()
+    }
+    hadUndo.current = canUndo
+  }, [canUndo])
 
   const undoBar = canUndo && (
     <div
@@ -42,7 +60,7 @@ export function LogPanel({ entries, canUndo, onDelete, onClearAll, onUndo, onPau
       onBlur={() => onPauseUndo(false)}
     >
       <p>Conversion log cleared</p>
-      <button type="button" className={styles.button} onClick={onUndo}>
+      <button ref={undoRef} type="button" className={styles.button} onClick={onUndo}>
         Undo
       </button>
     </div>
@@ -50,7 +68,7 @@ export function LogPanel({ entries, canUndo, onDelete, onClearAll, onUndo, onPau
 
   if (entries.length === 0) {
     return (
-      <div className={styles.emptyWrap}>
+      <div ref={emptyRef} className={styles.emptyWrap} tabIndex={-1}>
         {undoBar}
         <EmptyState title="No conversions logged yet">
           Every conversion is recorded here automatically when you tap <span className="label">Log conversion</span>.
@@ -67,14 +85,14 @@ export function LogPanel({ entries, canUndo, onDelete, onClearAll, onUndo, onPau
         <>
           <span>{entries.length} logged</span>
           {extraActions}
-          <button type="button" className={styles.button} onClick={onClearAll}>
+          <button ref={clearRef} type="button" className={styles.button} onClick={onClearAll}>
             Clear all
           </button>
         </>
       }
     >
-      <ol className={panelStyles.list}>
-        {entries.map((e) => {
+      <ol ref={listRef} className={panelStyles.list}>
+        {entries.map((e, index) => {
           const relative = formatRelativeTime(e.timestamp, now)
           const isDate = /\d [A-Z]/.test(relative)
           return (
@@ -100,8 +118,12 @@ export function LogPanel({ entries, canUndo, onDelete, onClearAll, onUndo, onPau
               <button
                 type="button"
                 className={styles.delete}
+                data-delete
                 aria-label={`Delete conversion ${e.from} to ${e.to}, ${formatAmount(e.sendAmount)}`}
-                onClick={() => onDelete(e.id)}
+                onClick={() => {
+                  markRemoved(index)
+                  onDelete(e.id)
+                }}
               >
                 <Icon name="delete" size={16} className={styles.deleteIcon} />
                 <Icon name="delete-filled" size={16} className={styles.deleteIconHover} />

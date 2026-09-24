@@ -1,10 +1,14 @@
 .header {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-areas: 'logo meta actions';
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--space-100) var(--space-200);
+  gap: var(--space-100) var(--space-150);
   padding: var(--space-250) var(--space-300);
+}
+
+.logo {
+  grid-area: logo;
 }
 
 .logo svg {
@@ -12,13 +16,15 @@
   height: 26px;
 }
 
-.right {
+.actions {
   display: flex;
-  align-items: center;
-  gap: var(--space-150);
+  grid-area: actions;
+  gap: var(--space-100);
 }
 
 .meta {
+  grid-area: meta;
+  justify-self: end;
   color: var(--color-text-muted);
   font-size: var(--text-preset-4-size);
   line-height: var(--text-preset-4-line);
@@ -28,9 +34,19 @@
 }
 
 /* Mobile header: 52px, scaled-down logo, 10px meta (Figma 248:1582). */
+/* Mobile: logo + buttons on the first row, data source line below (not in Figma: the
+   buttons are extra UI per spec Assumption "UI not in the design"). */
 @media (max-width: 767px) {
   .header {
-    padding: var(--space-200);
+    grid-template-areas:
+      'logo actions'
+      'meta meta';
+    grid-template-columns: 1fr auto;
+    padding: var(--space-150) var(--space-200);
+  }
+
+  .meta {
+    justify-self: start;
   }
 
   .logo svg {

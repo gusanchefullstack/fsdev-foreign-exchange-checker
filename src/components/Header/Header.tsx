@@ -9,12 +9,10 @@ export function Header({ currencyCount, actions }: { currencyCount: number | nul
       <div className={styles.logo}>
         <Logo />
       </div>
-      <div className={styles.right}>
-        <p className={styles.meta}>
-          {currencyCount !== null && <>{currencyCount} Currencies · </>}EOD · ECB data
-        </p>
-        {actions}
-      </div>
+      <p className={styles.meta}>
+        {currencyCount !== null && <>{currencyCount} Currencies · </>}EOD · ECB data
+      </p>
+      {actions && <div className={styles.actions}>{actions}</div>}
     </header>
   )
 }
