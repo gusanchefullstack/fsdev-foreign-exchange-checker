@@ -47,7 +47,7 @@
 }
 
 .tab[aria-selected='true']::after {
-  background: var(--color-accent);
+  background: var(--color-accent-border);
 }
 
 .tab:focus-visible {

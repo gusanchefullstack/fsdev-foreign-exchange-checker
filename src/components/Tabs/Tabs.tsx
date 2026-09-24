@@ -84,7 +84,6 @@ export function Tabs({ tabs, active, onChange, children }: TabsProps) {
               role="tab"
               type="button"
               aria-selected={selected}
-              aria-label={tab.badge ? `${tab.label}, ${tab.badge} items` : undefined}
               aria-controls={panelDomId(tab.id)}
               tabIndex={selected ? 0 : -1}
               className={styles.tab}
@@ -93,9 +92,13 @@ export function Tabs({ tabs, active, onChange, children }: TabsProps) {
             >
               <span className={styles.label}>{tab.label}</span>
               {tab.badge !== undefined && tab.badge > 0 && (
-                <span className={styles.badge} aria-hidden="true">
-                  {tab.badge}
-                </span>
+                <>
+                  {' '}
+                  <span className={styles.badge}>
+                    {tab.badge}
+                    <span className="visually-hidden"> items</span>
+                  </span>
+                </>
               )}
             </button>
           )

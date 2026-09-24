@@ -20,7 +20,7 @@
 }
 
 .iconOnly.pinned {
-  border-color: var(--color-accent);
+  border-color: var(--color-accent-border);
 }
 
 .iconOnly.pinned .icon {

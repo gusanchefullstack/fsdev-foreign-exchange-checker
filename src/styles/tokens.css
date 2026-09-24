@@ -72,6 +72,7 @@
   --color-accent: var(--color-lime-500);
   --color-accent-soft: var(--color-lime-800);
   --color-accent-text: var(--color-lime-500);
+  --color-accent-border: var(--color-lime-500);
   --color-on-accent: var(--color-neutral-900);
   --color-up: var(--color-green-500);
   --color-down: var(--color-red-500);
@@ -101,6 +102,7 @@
   --color-accent: var(--color-lime-500);
   --color-accent-soft: #eefcbf;
   --color-accent-text: #4d6300;
+  --color-accent-border: #6b8a00;
   --color-on-accent: var(--color-neutral-900);
   --color-up: #1f7a00;
   --color-down: #c4001a;

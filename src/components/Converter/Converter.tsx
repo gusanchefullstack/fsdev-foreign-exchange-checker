@@ -104,6 +104,8 @@ export function Converter({
               <output
                 className={`${styles.amount} ${styles.received} ${sizeClass(received)}`}
                 aria-labelledby="receive-label"
+                // <output> is an implicit live region; the debounced announcement below replaces it.
+                aria-live="off"
                 data-testid="received-amount"
               >
                 {received}

@@ -75,7 +75,7 @@ describe('Favorites in the app (US2)', () => {
     expect(toggle).toHaveAttribute('aria-pressed', 'false')
     await user.click(toggle)
     expect(screen.getByRole('button', { name: 'Favorited' })).toHaveAttribute('aria-pressed', 'true')
-    expect(screen.getByRole('tab', { name: 'Favorites, 1 items' })).toBeInTheDocument()
+    expect(screen.getByRole('tab', { name: /^Favorites\s*1\s*items$/ })).toBeInTheDocument()
     first.unmount()
 
     // Reload: still pinned; swap to EUR→USD, then load USD→EUR from the Favorites tab.

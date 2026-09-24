@@ -20,7 +20,7 @@ describe('Tabs', () => {
     const history = screen.getByRole('tab', { name: 'History' })
     expect(history).toHaveAttribute('aria-selected', 'true')
     expect(screen.getByRole('tabpanel', { name: 'History' })).toHaveTextContent('History content')
-    expect(screen.getByRole('tab', { name: 'Favorites, 10 items' })).toHaveAttribute('tabindex', '-1')
+    expect(screen.getByRole('tab', { name: /^Favorites\s*10\s*items$/ })).toHaveAttribute('tabindex', '-1')
   })
 
   it('moves focus with arrow/Home/End keys and activates with Enter (manual activation)', async () => {

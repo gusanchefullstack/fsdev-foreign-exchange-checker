@@ -2,58 +2,59 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Project state
+## Project
 
-This is the **FX Checker** Frontend Mentor challenge (currency converter with live rates, rate-history chart, multi-currency compare, favorites, conversion log). The repo is still at the **pre-implementation / spec-driven-development stage**: it holds only the Frontend Mentor starter (`index.html` with static copy, `assets/`), the Figma file, and Spec Kit scaffolding. The current feature is `specs/001-fx-checker-app/` (spec, plan, research, data model, contracts, quickstart). Until implementation begins there's no `package.json` or `src/`. The planned commands are `npm run dev`, `npm run build`, `npm run lint`, `npm test`, and for a single test `npx vitest run <file>` or `npx vitest run -t "<name>"`.
+**FX Checker**, the Frontend Mentor challenge: a currency converter with live rates, a rate-history chart, multi-currency compare, favorites, and a conversion log. It's a frontend-only React + TypeScript + Vite single-page app. There's no backend; rates come from a public API and user data lives in `localStorage`. GitHub: `gusanchefullstack/fsdev-foreign-exchange-checker`.
+
+## Commands
+
+```bash
+npm run dev          # Vite dev server → http://localhost:5173
+npm run build        # tsc -b + production build to dist/
+npm run preview      # serve dist/
+npm run lint         # ESLint (typescript-eslint, react-hooks, jsx-a11y)
+npm test             # Vitest, run once (jsdom)
+npx vitest run src/utils/format.test.ts   # single file
+npx vitest run -t "swaps currencies"      # single test by name
+```
 
 ## Spec-driven workflow (Spec Kit)
 
-Work follows GitHub Spec Kit (v1.0.11, `.specify/`) via the `speckit-*` skills in `.claude/skills/`:
+The feature is specified in `specs/001-fx-checker-app/`: `spec.md` (FR-/SC- ids), `plan.md`, `research.md`, `data-model.md`, `contracts/`, `quickstart.md`, `tasks.md`, and `checklists/validation.md`. The constitution is `.specify/memory/constitution.md`.
 
-`speckit-constitution` → `speckit-specify` → `speckit-clarify` → `speckit-plan` → `speckit-tasks` → `speckit-analyze` → `speckit-implement` (plus `speckit-checklist`, `speckit-converge`, `speckit-taskstoissues`).
+- **Build only what `spec.md` documents** ("zero shadow code", Constitution I). If a request contradicts the spec or constitution, stop and ask for the spec to be updated before changing code.
+- UI that isn't in Figma (light theme, theme toggle, shortcuts help, stale banner, undo bar) follows the spec Assumption "UI not in the design": only existing tokens and styles are used.
 
-- `.specify/memory/constitution.md` is still the unfilled template. The author's intended content lives in `my-sdd-docs/constitution-draft.md`; the feature spec draft is `my-sdd-docs/spec-draft.md`. Use these drafts as input to the constitution/specify steps.
-- Feature numbering is sequential; helper scripts are in `.specify/scripts/bash/` (sh).
-- **Build only what the spec documents** ("zero shadow code"). If a user instruction contradicts the constitution or the spec looks logically wrong, stop, flag it, and ask for the spec to be updated before touching source code.
+## Architecture
 
-## Intended architecture (from the drafts)
+- `src/App.tsx`: `FxChecker` owns the top-level state: the active pair, amount text, tab (persisted), range, and help panel. It wires the hooks into the components. The pair starts as `null` meaning "take it from the URL or the default", so no effect is needed.
+- `src/services/frankfurter.ts`: the **only** module that calls `fetch`. It maps every failure to `RatesError` codes; the UI shows friendly copy and never raw errors (Constitution IV).
+- **Rates**: `useRates` makes one request on load: `/v2/rates?base=USD&quotes=<catalog>&from=<today-10d>`. The last two dates per quote become `latest` and `previous`. Every pair is a **cross rate through USD** (`utils/rates.ts crossRate`), which feeds the converter, ticker, compare, and favorites. On failure it falls back to the cached snapshot (`fx:v1:rates`) with `stale: true`.
+- **History**: `useHistory` fetches the pair directly (`base=A&quotes=B`, with `group=week|month` for 1Y and 5Y) and caches per `pair-range` in memory. `historyStats`: 1D charts the last 5 points but compares the last two (FR-020).
+- **Currencies**: `data/currencyCatalog.ts` (code → flag and design name) intersected with `/v2/currencies`. The fixed design sets are here too: Popular, ticker pairs, compare codes.
+- **Persistence**: `usePersistentState(key, default, validate)` uses `fx:v1:*` keys. Bad or missing data falls back to the default, and storage errors are swallowed (`contracts/storage.md`).
+- **Formatting** (`utils/format.ts`): rates use 4, 3 or 2 decimals depending on whether they're below 10, below 100, or 100+ (FR-002). Amounts use 2 decimals below 100,000 and none from 100,000 up (FR-007).
+- **Accessibility**: WAI-ARIA tabs (a native `<select>` on mobile), a combobox + grouped listbox picker using `aria-activedescendant`, a radiogroup for ranges, one polite live region (`LiveAnnouncer`, `useAnnounce`), and a debounced converted-amount announcement. Exactly one `<main>` and one `<h1>`.
+- **Styling**: CSS Modules per component plus `src/styles/tokens.css` (Figma variables and semantic aliases; light theme under `:root[data-theme='light']`). Icons are inlined from `public/assets/images/*.svg` (`components/Icon`) so they follow `currentColor`.
+- **Tests** live next to their code. `tests/setup.ts` provides `mockFetch` and `setMatchMedia`; `tests/fixtures.ts` provides `mockApi()`, fixture rates, and history.
 
-- **Frontend only** (no backend/database is needed: rates come from a public API, user data lives in `localStorage`). If a backend is ever added, it goes in a separate repo (Node + Express + TypeScript, Prisma Postgres), not a monorepo.
-- React + TypeScript + Vite; Vitest for tests. `index.html` stays at the project root as Vite's entry and loads the app from `src/`. Components go in a components folder under `src/`, with styles and TS in their own subfolders.
-- Styling with CSS Modules. Colors, fonts, gradients, and typography must be tokens in a separate variables file.
-- Naming: `camelCase` for functions/variables, `PascalCase` for components, types, interfaces, and classes. Keep the structure flat; avoid over-engineering.
-- Never show raw errors or stack traces in the UI; map failures to friendly messages (for example, the chart error state).
+## Data source
 
-### Data
+[Frankfurter API](https://frankfurter.dev/) v2 at `https://api.frankfurter.dev`. **The challenge README's `/v2/latest` and `/v2/{start}..{end}` endpoints return 404.** Use `/v2/currencies`, `/v2/rates`, and `/v2/rate/{b}/{q}` (see `contracts/frankfurter-api.md`).
 
-[Frankfurter API](https://frankfurter.dev/) v2 at `https://api.frankfurter.dev` (no key, CORS-enabled). **The endpoints in the challenge README (`/v2/latest`, `/v2/{start}..{end}`) now return 404.** Use the live shape in `specs/001-fx-checker-app/contracts/frankfurter-api.md`:
-- `GET /v2/currencies`: currency list (166 codes; the app shows only those with a bundled flag, about 57)
-- `GET /v2/rates?base=USD&quotes=…&from=…`: one call on load gives the latest and previous rates; every pair is a cross rate through USD
-- `GET /v2/rates?base=A&quotes=B&from=…[&group=week|month]`: rate history for each range
+## Design source of truth
 
-Persist favorites, conversion log, and the last-open tab in `localStorage`.
-
-### Design source of truth
-
-- The Figma file (`figma-design/*.fig`) is authoritative for colors, spacing, fonts, and responsive layouts. Read it through the **figma-desktop MCP**. System design: node `100-53`; Desktop/Tablet/Mobile screens: node `54-2` (file key `oXwjhmoIUfQyxx7Gy6HS16`).
-- Design widths are 375px (mobile) and 1440px (desktop), with tablet in between. The layout must work from 320px up. Tabs collapse into a dropdown on mobile.
-- The starter `index.html` holds all static copy, with `Dynamic:` comments marking data-driven content. Keep labels in normal case in the markup and uppercase them with CSS (`text-transform`); acronyms and codes stay as they are. Logo `alt="FX Checker"`.
-- The font is JetBrains Mono (local variable font in `assets/fonts/`). Icons and flags (`assets/images/flags/<iso>.webp`) are already optimized.
-
-### Accessibility requirements (scored by Frontend Mentor)
-
-Exactly one `<main>` and one `<h1>`; semantic landmarks; full keyboard support (currency picker popover, swap, tabs, chart range, star toggles); strong visible focus rings on the dark UI; live-region announcements for converted amount, pin/unpin, and log events; no repeated identical link text.
+The Figma file (`figma-design/*.fig`, git-ignored) is read through the **figma-desktop MCP**. Design system: node `100:53`. Screens: `54:2` (desktop `75:175`, tablet `237:1176`, mobile `237:1337`). Check layouts at 375, 768 and 1440 px, with no horizontal scroll from 320 px up. Keep labels in normal case in the JSX and uppercase them with CSS; acronyms and currency codes stay as they are.
 
 ## Constraints
 
-- **Never commit design files.** `.gitignore` excludes `*.fig`, `*.sketch`, `*.xd`; don't modify those entries.
-- GitHub repos must use the `fsdev-` prefix.
-- Test at 375px, 768px, and 1440px viewports.
+- **Never commit design files.** `.gitignore` excludes `*.fig`, `*.sketch`, `*.xd`; don't change those entries.
+- GitHub repos use the `fsdev-` prefix.
 
-## Post-implementation pipeline (only when the user confirms)
+## Post-implementation pipeline (each step needs the user's confirmation)
 
-1. Deploy the frontend to Vercel.
-2. Take screenshots at exactly 375px and 1440px into `/screenshots`, then write `README.md` from `README-template.md` (use the `create-readme` skill). Show 375px shots at 40% of the width of the 1440px ones. Put the author's social links from `spec-draft.md` in the Author section as inline badges.
-3. Submit with the `frontendmentor-submitter` agent (challenge: `foreign-exchange-currency-converter`). Then add the solution URL and live URL to the README and the GitHub repo page.
-4. Ask first, then update the portfolio with `landing-page-portfolio-updater`.
-5. Ask first, then fix the quality report with `frontend-mentor-issue-fixer` / the `frontendmentor-report` skill.
+1. Deploy to Vercel.
+2. Take screenshots at exactly 375 px and 1440 px into `screenshots/`. Write `README.md` from `README-template.md` with the `create-readme` skill; the 375 px shot is 40% of the 1440 px width, and the author links from `my-sdd-docs/spec-draft.md` go in as an inline row of badges.
+3. Submit with the `frontendmentor-submitter` agent (`foreign-exchange-currency-converter`). Then add the solution URL and live URL to the README and the repo homepage.
+4. Update the portfolio with `landing-page-portfolio-updater`.
+5. Fix the quality report with `frontend-mentor-issue-fixer` / the `frontendmentor-report` skill.

@@ -32,6 +32,7 @@
   font-size: var(--text-preset-5-size);
   line-height: var(--text-preset-5-line);
   letter-spacing: var(--text-preset-5-tracking);
+  text-transform: uppercase;
 }
 
 .list {

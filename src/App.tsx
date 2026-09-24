@@ -166,7 +166,11 @@ function FxChecker() {
         }
       />
       {helpOpen && <ShortcutsHelp onClose={closeHelp} />}
-      {ready && <LiveTicker rate={rates.rate} change={rates.change} />}
+      {ready ? (
+        <LiveTicker rate={rates.rate} change={rates.change} />
+      ) : (
+        <div className={styles.tickerPlaceholder} aria-hidden="true" />
+      )}
       <main className={styles.content}>
         <h1 className="visually-hidden">FX Checker currency converter</h1>
         {rates.snapshot?.stale && <StaleBanner date={rates.snapshot.date} />}

@@ -513,13 +513,13 @@ with the contract header and rows. Hovering the chart shows the date and rate (q
 **Purpose**: Quality gates, visual fidelity, documentation, and deployment (carried over from the
 spec draft and plan)
 
-- [ ] T085 Run the full quality gate: `npm run lint`, `npm test`, `npm run build`. Fix every failure and check that the gzipped JS bundle is under 100 KB (`dist/assets/*.js`)
-- [ ] T086 Visual fidelity pass: compare the running app with the Figma screenshots at exactly 375 and 1440 (and 768) using the figma-desktop MCP `get_screenshot` and Chrome DevTools `take_screenshot`, and fix spacing, type, and color deviations in the component CSS modules (Principle II)
-- [ ] T087 Accessibility audit: run a Chrome DevTools Lighthouse accessibility audit on each tab at 375 and 1440, aiming for 100 (SC-005), then do a manual VoiceOver pass over quickstart V10. Fix any findings
-- [ ] T088 Performance check (SC-001, SC-002): with Chrome DevTools, record a performance trace while typing 10 characters in Send and confirm each input-to-paint is under 100 ms. Run Lighthouse performance on a production build (`npm run preview`) with network throttling off and confirm the first converted amount renders within 3 s. Record the results in `specs/001-fx-checker-app/checklists/validation.md`
-- [ ] T089 Run every quickstart.md validation scenario (V1–V13) at 375, 768, and 1440, and record the results in `specs/001-fx-checker-app/checklists/validation.md`
-- [ ] T090 [P] Add plain-language comments to the key logic: cross-rate math, history stats, the undo timer, cache fallback, shortcut guards (`src/utils/rates.ts`, `src/hooks/useConversionLog.ts`, `src/hooks/useRates.ts`, `src/hooks/useShortcuts.ts`)
-- [ ] T091 Update `CLAUDE.md` with the real commands and a short note on the final architecture, replacing the "planned" wording
+- [X] T085 Run the full quality gate: `npm run lint`, `npm test`, `npm run build`. Fix every failure and check that the gzipped JS bundle is under 100 KB (`dist/assets/*.js`)
+- [X] T086 Visual fidelity pass: compare the running app with the Figma screenshots at exactly 375 and 1440 (and 768) using the figma-desktop MCP `get_screenshot` and Chrome DevTools `take_screenshot`, and fix spacing, type, and color deviations in the component CSS modules (Principle II)
+- [X] T087 Accessibility audit: run a Chrome DevTools Lighthouse accessibility audit on each tab at 375 and 1440, aiming for 100 (SC-005), then do a manual VoiceOver pass over quickstart V10. Fix any findings
+- [X] T088 Performance check (SC-001, SC-002): with Chrome DevTools, record a performance trace while typing 10 characters in Send and confirm each input-to-paint is under 100 ms. Run Lighthouse performance on a production build (`npm run preview`) with network throttling off and confirm the first converted amount renders within 3 s. Record the results in `specs/001-fx-checker-app/checklists/validation.md`
+- [X] T089 Run every quickstart.md validation scenario (V1–V13) at 375, 768, and 1440, and record the results in `specs/001-fx-checker-app/checklists/validation.md`
+- [X] T090 [P] Add plain-language comments to the key logic: cross-rate math, history stats, the undo timer, cache fallback, shortcut guards (`src/utils/rates.ts`, `src/hooks/useConversionLog.ts`, `src/hooks/useRates.ts`, `src/hooks/useShortcuts.ts`)
+- [X] T091 Update `CLAUDE.md` with the real commands and a short note on the final architecture, replacing the "planned" wording
 - [ ] T092 Ask the user to confirm the project is done, then deploy to Vercel under the user's account (production), and record the live URL
 - [ ] T093 Take the screenshots at exactly 375px and 1440px viewports into `screenshots/` (e.g., `screenshots/mobile-375.png`, `screenshots/desktop-1440.png`)
 - [ ] T094 Write `README.md` from `README-template.md` using the `create-readme` skill:
