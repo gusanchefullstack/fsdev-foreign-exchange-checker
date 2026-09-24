@@ -553,7 +553,7 @@ ticker and default 1M chart from bundled data. Once live data loads, it replaces
 - [X] T101 Implement `src/data/bootstrap.ts` (parse and validate the JSON using the same row grouping as `fetchLatestSnapshot`) and update `src/hooks/useRates.ts` to start from it (FR-054)
 - [X] T102 Seed `useHistory` with the bundled USD→EUR 1M series as a provisional cache entry. It renders immediately and is replaced by the live fetch. Add tests in `src/hooks/useHistory.test.ts`
 - [X] T103 Run lint, test and build, deploy, and check with the network blocked in DevTools that the first paint shows the converter and chart
-- [ ] T104 After the user confirms, ask the `frontendmentor-submitter` agent to change the solution's live URL to `https://fsdev-foreign-exchange-checker.vercel.app/?from=USD&to=EUR` to force a new screenshot, then check the thumbnail
+- [X] T104 After the user confirms, ask the `frontendmentor-submitter` agent to change the solution's live URL to `https://fsdev-foreign-exchange-checker.vercel.app/?from=USD&to=EUR` to force a new screenshot, then check the thumbnail
 
 ---
 
