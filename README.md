@@ -79,7 +79,7 @@ I also built the challenge's optional ideas:
 
 ## Getting started
 
-**Prerequisites:** Node.js ≥ 20 (developed on Node 26) and npm.
+**Prerequisites:** Node.js 20.19+ or 22.12+ (required by Vite 8; developed on Node 26) and npm.
 
 ```bash
 git clone https://github.com/gusanchefullstack/fsdev-foreign-exchange-checker.git
