@@ -74,7 +74,7 @@ I also built the challenge's optional ideas:
 
 ### Links
 
-- Solution URL: _Frontend Mentor solution link coming after submission_
+- Solution URL: [FX Checker on Frontend Mentor](https://www.frontendmentor.io/solutions/fx-checker-react-19-typescript-spec-driven-currency-converter-GMw2Kbj52N)
 - Live Site URL: [fsdev-foreign-exchange-checker.vercel.app](https://fsdev-foreign-exchange-checker.vercel.app)
 - Repository: [github.com/gusanchefullstack/fsdev-foreign-exchange-checker](https://github.com/gusanchefullstack/fsdev-foreign-exchange-checker)
 
