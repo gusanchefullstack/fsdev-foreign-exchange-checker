@@ -1,0 +1,65 @@
+.row {
+  padding: 0 var(--space-200) 0 0;
+}
+
+/* The whole row body is the "load pair" button; the star is a separate control. */
+.load {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-250);
+  align-self: stretch;
+  min-width: 0;
+  padding: var(--space-150) 0 var(--space-150) var(--space-200);
+  border-radius: 10px 0 0 10px;
+  text-align: left;
+}
+
+.load:focus-visible {
+  outline-offset: -2px;
+}
+
+.pair {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-100);
+  font-size: var(--text-preset-4-size);
+  line-height: var(--text-preset-4-line);
+  letter-spacing: var(--text-preset-4-tracking);
+}
+
+.arrow {
+  color: var(--color-text-muted);
+}
+
+.price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-075);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.rate {
+  font-size: var(--text-preset-3-size);
+  line-height: var(--text-preset-3-line);
+  letter-spacing: var(--text-preset-3-tracking);
+}
+
+.change {
+  font-size: var(--text-preset-6-size);
+  line-height: 1;
+}
+
+@media (max-width: 767px) {
+  .row {
+    padding-right: var(--space-150);
+  }
+
+  .load {
+    gap: var(--space-150);
+    padding-left: var(--space-150);
+  }
+}

@@ -185,13 +185,13 @@ updates), and unpin the other. With none left, the empty state shows (quickstart
 
 ### Tests for User Story 2
 
-- [ ] T032 [P] [US2] Hook tests in `src/hooks/useFavorites.test.ts`:
+- [X] T032 [P] [US2] Hook tests in `src/hooks/useFavorites.test.ts`:
   - Pin adds it newest first
   - A duplicate pin does nothing ("Unique by `from-to` (FR-032)")
   - Unpin removes it
   - Favorites persist to `fx:v1:favorites` and reload from it
   - Invalid stored entries are dropped individually
-- [ ] T033 [P] [US2] Panel tests in `src/components/FavoritesPanel/FavoritesPanel.test.tsx`:
+- [X] T033 [P] [US2] Panel tests in `src/components/FavoritesPanel/FavoritesPanel.test.tsx`:
   - Rows show "USD → EUR", the rate, and the change % with ▲/▼
   - Header "N favorites"
   - Selecting a row calls `onSelectPair`
@@ -201,18 +201,18 @@ updates), and unpin the other. With none left, the empty state shows (quickstart
 
 ### Implementation for User Story 2
 
-- [ ] T034 [US2] Create `src/hooks/useFavorites.ts` on top of `usePersistentState('favorites', [], validateFavorites)`, exposing `favorites`, `isPinned(pair)`, `toggle(pair)`, and `remove(pair)`. Order is newest `pinnedAt` first, and duplicates by `from-to` are prevented (FR-028, FR-032)
-- [ ] T035 [US2] Add the Favorite toggle to `src/components/Converter/Converter.tsx` and its CSS:
+- [X] T034 [US2] Create `src/hooks/useFavorites.ts` on top of `usePersistentState('favorites', [], validateFavorites)`, exposing `favorites`, `isPinned(pair)`, `toggle(pair)`, and `remove(pair)`. Order is newest `pinnedAt` first, and duplicates by `from-to` are prevented (FR-028, FR-032)
+- [X] T035 [US2] Add the Favorite toggle to `src/components/Converter/Converter.tsx` and its CSS:
   - A `<button aria-pressed>` with a star icon (`icon-star.svg` or `icon-star-filled.svg`)
   - The label is "Favorite" when unpinned and "Favorited" when pinned, with the lime filled style from Figma
   - It announces "USD to EUR added to favorites" or "…removed from favorites" (FR-005, FR-043)
-- [ ] T036 [US2] Create `src/components/FavoritesPanel/FavoritesPanel.tsx` and `FavoritesPanel.module.css`, per Figma 160:2949 and the FavoritesItem 257px frame:
+- [X] T036 [US2] Create `src/components/FavoritesPanel/FavoritesPanel.tsx` and `FavoritesPanel.module.css`, per Figma 160:2949 and the FavoritesItem 257px frame:
   - The section title "Pinned pairs" with the count "N favorites"
   - A `<ul>` of rows, each a `<button>` (accessible name "Load USD to EUR") showing the pair, the live rate, and the change % colored up/down
   - A separate filled-star unpin button with `aria-label="Unpin USD to EUR"`
   - `EmptyState` with the copy from spec FR-031
   - Favorites whose currency isn't in the list are hidden (FR-028–FR-031)
-- [ ] T037 [US2] In `src/App.tsx`, wire `useFavorites` into `App`:
+- [X] T037 [US2] In `src/App.tsx`, wire `useFavorites` into `App`:
   - The Favorites tab badge shows `favorites.length`
   - Render `FavoritesPanel` in its tabpanel
   - Selecting a row sets the active `pair`
