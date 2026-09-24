@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { axe } from 'vitest-axe'
 import { describe, expect, it, vi } from 'vitest'
@@ -66,7 +66,7 @@ describe('Logging from the converter (US3)', () => {
     await user.click(screen.getByRole('button', { name: 'Log conversion' }))
     await user.click(screen.getByRole('tab', { name: /Log/ }))
     expect(screen.getByText('1 logged')).toBeInTheDocument()
-    expect(screen.getByRole('listitem')).toHaveTextContent('876.40')
+    expect(within(screen.getByRole('tabpanel')).getByRole('listitem')).toHaveTextContent('876.40')
 
     const input = screen.getByRole('textbox', { name: 'Amount to send' })
     await user.clear(input)

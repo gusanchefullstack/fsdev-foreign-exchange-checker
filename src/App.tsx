@@ -5,6 +5,7 @@ import { Converter } from './components/Converter/Converter'
 import { FavoritesPanel } from './components/FavoritesPanel/FavoritesPanel'
 import { Header } from './components/Header/Header'
 import { HistoryPanel } from './components/HistoryPanel/HistoryPanel'
+import { LiveTicker } from './components/LiveTicker/LiveTicker'
 import { LogPanel } from './components/LogPanel/LogPanel'
 import { LiveAnnouncerProvider, useAnnounce } from './components/LiveAnnouncer/LiveAnnouncer'
 import { PinButton } from './components/PinButton/PinButton'
@@ -88,6 +89,7 @@ function FxChecker() {
   return (
     <>
       <Header currencyCount={rates.status === 'ready' ? rates.currencies.length : null} />
+      {rates.status === 'ready' && <LiveTicker rate={rates.rate} change={rates.change} />}
       <main className={styles.content}>
         <h1 className="visually-hidden">FX Checker currency converter</h1>
         <section className={styles.section} aria-labelledby="converter-title">

@@ -402,7 +402,7 @@ it, and reduced motion stops it (quickstart V9).
 
 ### Tests for User Story 6
 
-- [ ] T065 [P] [US6] Tests in `src/components/LiveTicker/LiveTicker.test.tsx`:
+- [X] T065 [P] [US6] Tests in `src/components/LiveTicker/LiveTicker.test.tsx`:
   - It renders 7 pairs with the rate formatted by `formatRate` (FR-002) and ▲/▼ change with the up/down class
   - The duplicated loop copy is `aria-hidden="true"`
   - The region is labeled "Live markets"
@@ -410,12 +410,12 @@ it, and reduced motion stops it (quickstart V9).
 
 ### Implementation for User Story 6
 
-- [ ] T066 [US6] Create `src/components/LiveTicker/LiveTicker.tsx` and `LiveTicker.module.css`, per Figma Livemarkets (334:8160, 40px desktop and 34px mobile):
+- [X] T066 [US6] Create `src/components/LiveTicker/LiveTicker.tsx` and `LiveTicker.module.css`, per Figma Livemarkets (334:8160, 40px desktop and 34px mobile):
   - A fixed "● Live markets" lime label
   - A `<section aria-label="Live markets">` containing a `<ul>` of `TICKER_PAIRS` items, each showing the muted pair, the rate, and the colored change %, each 208px wide
   - A second `aria-hidden` copy for a seamless CSS `@keyframes` translateX loop
   - `animation-play-state: paused` on `:hover` and `:focus-within`, and no animation under `prefers-reduced-motion`, where the list becomes horizontally scrollable inside its own container (FR-014, FR-015)
-- [ ] T067 [US6] In `src/App.tsx`, render `LiveTicker` between the header and main
+- [X] T067 [US6] In `src/App.tsx`, render `LiveTicker` between the header and main
 
 **Checkpoint**: All P1–P3 stories are complete.
 
